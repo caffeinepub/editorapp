@@ -1,119 +1,346 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Complete AI Tool Implementation with Full Mock Data and Backend Integration",
+  "title": "Complete responsive video and photo editors with mobile/desktop layouts",
   "requirements": [
     {
-      "id": "REQ-187",
-      "summary": "Implement complete mock AI functions for all 50+ job types with realistic placeholder data in aiService.ts",
+      "id": "REQ-228",
+      "summary": "Create useMediaQuery custom hook for responsive breakpoint detection",
       "acceptanceCriteria": [
-        "Mock functions for all 50+ job types implemented",
-        "Each mock returns structured data matching expected format",
-        "Data includes realistic values (URLs, scores, timestamps)",
-        "Mock responses simulate processing delay (500-2000ms)",
-        "All mocks return consistent data shapes"
+        "Hook accepts media query string as parameter (e.g., '(min-width: 1024px)')",
+        "Uses window.matchMedia API to check match status",
+        "Returns boolean indicating current match status",
+        "Updates state on window resize/orientation change",
+        "Cleans up event listener on component unmount"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/services/aiService.ts",
+          "path": "frontend/src/hooks/useMediaQuery.ts",
           "operation": "modify",
-          "description": "Implement complete mock functions for all 50+ AI job types including mockVoiceClone (returning audioUrl, voiceId, sampleRate), mockMusicGenerate (audioUrl, duration, bpm, waveform array), mockBRollGenerate (videoUrl, scenes array with timing and descriptions), mockLogoGenerate (logos array with variants), mockStickerGenerate (imageUrl, transparent flag), mockCharacterGenerate (images array with poses, consistency score), and similar structured responses for all remaining 43+ job types. Each mock should return realistic placeholder data with simulated processing delays between 500-2000ms using setTimeout/Promise patterns."
+          "description": "Update the existing useMediaQuery hook to ensure it accepts a media query string parameter, uses window.matchMedia API to check initial match status, sets up event listener using addEventListener('change') to track media query changes, updates boolean state on change, and cleans up listener on unmount. The hook should return the current match status boolean."
         }
       ]
     },
     {
-      "id": "REQ-188",
-      "summary": "Add API integration points for all external AI providers with error handling and retry logic",
+      "id": "REQ-229",
+      "summary": "Create responsive VideoEditor component with conditional mobile/desktop rendering",
       "acceptanceCriteria": [
-        "Configuration objects for all 6+ AI providers",
-        "Request handlers for each provider implemented",
-        "Error handling with descriptive messages",
-        "Retry logic with exponential backoff (3 attempts)",
-        "30-second timeout for all API calls"
+        "Uses useMediaQuery hook to detect 1024px breakpoint",
+        "Renders MobileVideoEditor for mobile screens",
+        "Renders DesktopVideoEditor for desktop screens",
+        "Both layouts share same editorStore state",
+        "Both layouts access same timeline engine and keyframe system",
+        "All 50+ AI tools available in both layouts"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/services/aiService.ts",
+          "path": "frontend/src/pages/VideoEditor.tsx",
           "operation": "modify",
-          "description": "Add API integration configuration objects for elevenlabsConfig (apiKey, voiceId, stability, similarity), replicateConfig (apiKey, models for image/video), runwayConfig (apiKey, projectId), huggingfaceConfig (apiKey, models record), openaiConfig (apiKey, model, temperature), and provider-specific request handlers. Implement error handling with descriptive messages, retry logic with exponential backoff (3 attempts), and 30-second timeout handling for all API calls using fetch with AbortController."
+          "description": "Update the existing VideoEditor page to use useMediaQuery('(min-width: 1024px)') hook to detect screen width. Conditionally render MobileVideoEditor component when the query returns false (screens < 1024px) or DesktopVideoEditor component when true (screens >= 1024px). Both components should access the same editorStore state, timeline engine, keyframe system, and all AI tools. Keep existing Toolbar, AIAssistant, ExportModal, and ProjectsModal components as they are already implemented and shared."
         }
       ]
     },
     {
-      "id": "REQ-189",
-      "summary": "Update useAIJob hook to implement comprehensive job lifecycle management for all 50+ job types with automatic asset and timeline integration",
+      "id": "REQ-230",
+      "summary": "Create VideoPlayer component with playback controls and ref forwarding",
       "acceptanceCriteria": [
-        "submitAIJob handles all 50+ job types",
-        "Status polling checks every 2 seconds until completion",
-        "Results retrieved automatically on completion",
-        "Generation AI results added to asset library",
-        "Editing/Creator AI results integrated into timeline",
-        "Category-specific notifications with appropriate actions"
+        "Renders HTML5 video element with src prop",
+        "Displays centered play/pause overlay button",
+        "Tracks currentTime via timeupdate event",
+        "Calls onTimeUpdate callback with time value",
+        "Supports ref forwarding with control methods",
+        "Applies styling: width 100%, rounded-xl, bg-black"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useAIJob.ts",
+          "path": "frontend/src/components/VideoPlayer.tsx",
           "operation": "modify",
-          "description": "Implement comprehensive job lifecycle management with submitAIJob function using React Query mutation calling backend submitJob method, status polling using React Query with configurable 2-second interval checking job status via getJobStatus until 'completed' or 'failed', result retrieval calling backend getJobResults when status is 'completed'. Add automatic asset integration for Generation AI jobs (image.generate, video.generate, voice.clone, music.generate, broll.generate, logo.generate, sticker.generate, character.generate) that adds results to asset library with metadata. Add automatic timeline integration for Editing/Creator AI jobs that creates new clips/layers with proper timing and transforms. Implement category-specific success notifications using toast with action buttons (View in Assets, View on Timeline, Apply Changes, Download) based on job type category."
+          "description": "Update the existing VideoPlayer component to ensure it renders an HTML5 video element with src prop, implements a centered play/pause overlay button with icon, tracks currentTime state via timeupdate event listener, calls onTimeUpdate callback prop with current time value, calls onPlay and onPause callback props when playback state changes, supports ref forwarding using forwardRef and useImperativeHandle to expose play/pause/seek/getCurrentTime methods, and applies styling with width 100%, rounded-xl border radius, and bg-black background."
         }
       ]
     },
     {
-      "id": "REQ-190",
-      "summary": "Update AIAssistant component to add command interface panel with quick commands, autocomplete, and command history",
+      "id": "REQ-231",
+      "summary": "Implement MobileVideoEditor component with CapCut-inspired vertical layout",
       "acceptanceCriteria": [
-        "10 quick command buttons with glassmorphism styling",
-        "Autocomplete shows matching commands as user types",
-        "Command history displays last 20 commands",
-        "Commands map to appropriate AI jobs",
-        "Context automatically inferred from editor state"
+        "Vertical layout with VideoPlayer at top",
+        "Timeline component with horizontal scrolling",
+        "Touch-optimized Toolbar with large tap targets (min 48px)",
+        "Quick action buttons: Trim, Split, Text, Stickers, Music, Filters, Effects, AI",
+        "Glassmorphism styling: bg-white/10 backdrop-blur-xl rounded-xl",
+        "White text with shadows for visibility on glassmorphism",
+        "Connected to editorStore for state management"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/AIAssistant.tsx",
+          "path": "frontend/src/components/MobileVideoEditor.tsx",
           "operation": "modify",
-          "description": "Add command interface panel with quick command buttons section displaying 10 glassmorphism-styled buttons ('Make this cinematic', 'Fix color and audio', 'Turn into viral reel', 'Optimize for YouTube', 'Add motion blur', 'Balance exposure', 'Remove background noise', 'Add dynamic transitions', 'Enhance faces', 'Generate captions'). Add command input field with autocomplete dropdown that shows matching commands from aiKnowledgeBase as user types using fuzzy matching. Add command history panel showing last 20 executed commands with timestamps and result summaries stored in localStorage. Implement command execution handler that maps commands to appropriate AI job submissions (command.cinematic, command.fixColorAudio, command.viralReel) with automatic parameter inference from editor context using editorStore (selected clips, project settings)."
+          "description": "Update the existing MobileVideoEditor component to use a CapCut-inspired vertical layout with VideoPlayer component at top (width 100%, aspect ratio 16:9) with play/pause overlay and audio support, Timeline component in middle section with horizontal scrolling clips, and touch-optimized Toolbar at bottom with large tap targets (min 48px height) for quick actions including Trim, Split, Text, Stickers, Music, Filters, Effects, and AI buttons. Apply glassmorphism styling to panels (bg-white/10 backdrop-blur-xl rounded-xl border border-white/20), use white text with text shadows (shadow-lg) for visibility on glassmorphism backgrounds, and connect to editorStore for state management. The existing Timeline component should be reused."
         }
       ]
     },
     {
-      "id": "REQ-191",
-      "summary": "Update AIJobStatus component to support all 50+ job types with category filtering and color-coded progress",
+      "id": "REQ-232",
+      "summary": "Implement DesktopVideoEditor component with After Effects-inspired horizontal layout",
       "acceptanceCriteria": [
-        "jobTypeMapping covers all 50+ job types",
-        "Category filter dropdown functional",
-        "Progress bars color-coded by category",
-        "Expanded details show formatted job configuration",
-        "Status updates refresh every 2 seconds"
+        "Horizontal layout with top menu bar (h-12)",
+        "Menu buttons: File, Edit, Composition, Effects, Render",
+        "Left preview area using existing Preview component with WebGL/Three.js",
+        "Right side panel (w-80) with Layers and Effects panels",
+        "Bottom Timeline component (h-64) with keyframe editing",
+        "Glassmorphism panels: bg-white/10 backdrop-blur-xl rounded-xl border-white/20",
+        "Dark theme (bg-black) with white text for visibility"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/AIJobStatus.tsx",
+          "path": "frontend/src/components/DesktopVideoEditor.tsx",
           "operation": "modify",
-          "description": "Add jobTypeMapping object defining icon, label, and category for all 50+ job types. Add category filter dropdown allowing users to filter by AI category (All, Generation, Editing, Enhancement, Creator, Assistant, Growth, Experimental) using state management. Implement color-coded progress bars using category-specific colors (Generation: purple, Editing: blue, Enhancement: green, Creator: orange, Assistant: cyan, Growth: pink, Experimental: red) applied via Tailwind classes. Add expanded job details panel that shows job configuration parameters and payload data in formatted JSON using JSON.stringify with pretty printing. Ensure real-time status updates using React Query with 2-second refetchInterval for active jobs."
+          "description": "Update the existing DesktopVideoEditor component to implement an After Effects-inspired horizontal layout with top menu bar (h-12 bg-gray-900) containing File, Edit, Composition, Effects, and Render buttons, left preview area (flex-1) using the existing Preview component with isMobile={false} prop to enable WebGL/Three.js rendering pipeline for GPU-accelerated effects, right side panel (w-80) with stacked Layers panel showing clip list and Effects panel showing clip properties (reuse relevant parts from existing Inspector component logic), and bottom Timeline component (h-64) with keyframe editing capability. Apply glassmorphism styling to all panels (bg-white/10 backdrop-blur-xl rounded-xl border border-white/20), use dark theme (bg-black), and white text (text-white) with proper contrast. Connect to editorStore for accessing tracks, clips, and selected clip data."
         }
       ]
     },
     {
-      "id": "REQ-192",
-      "summary": "Update Home page to display all 50+ AI tools organized by 8 expandable categories with responsive grid layout",
+      "id": "REQ-233",
+      "summary": "Update Preview component to support mobile and desktop render modes",
       "acceptanceCriteria": [
-        "All 8 AI categories displayed with tools",
-        "Category headers show icon, name, and count",
-        "Expand/collapse functionality works smoothly",
-        "Responsive grid adapts to screen size",
-        "Category colors match established theme"
+        "Accepts isMobile boolean prop",
+        "When isMobile=true, renders VideoPlayer with first active video clip URL",
+        "When isMobile=false, uses existing WebGL/Three.js rendering pipeline",
+        "Both modes display active clips from timeline at current time",
+        "Uses TimelineEngine.getActiveClips to get active clips",
+        "Applies CoreEngine transforms when using WebGL mode"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Preview.tsx",
+          "operation": "modify",
+          "description": "Update the existing Preview component to accept an isMobile boolean prop. When isMobile is true, render the VideoPlayer component with the first active video clip's URL from the timeline (use TimelineEngine.getActiveClips to get active clips at current time and filter for video type clips). When isMobile is false, use the existing WebGL/Three.js rendering pipeline with React Three Fiber that applies CoreEngine transforms and effects. Both modes should display the same active clips from the timeline at the current playback time position. Ensure proper prop passing and conditional rendering logic."
+        }
+      ]
+    },
+    {
+      "id": "REQ-234",
+      "summary": "Create photoEditorStore for photo editor state management",
+      "acceptanceCriteria": [
+        "Uses Zustand for state management",
+        "State includes imageUrl (string | null)",
+        "Filters object: brightness, contrast, saturation (0-200, default 100), blur (0-10, default 0)",
+        "Stickers array with id, src, x, y, width, height",
+        "Actions: setImage, updateFilter, addSticker, updateSticker, removeSticker, resetFilters",
+        "Actions properly update state immutably"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/store/photoEditorStore.ts",
+          "operation": "modify",
+          "description": "Update the existing photoEditorStore to ensure it uses Zustand with state properties including imageUrl (string | null), filters object with brightness/contrast/saturation (0-200 range, default 100) and blur (0-10 range, default 0), and stickers array with objects containing id, src, x, y, width, and height. Ensure actions are properly defined: setImage(url), updateFilter(filterName, value), addSticker(sticker), updateSticker(id, updates), removeSticker(id), and resetFilters(). All actions must update state immutably following Zustand best practices."
+        }
+      ]
+    },
+    {
+      "id": "REQ-235",
+      "summary": "Implement PhotoCanvas component with filter rendering and ref forwarding",
+      "acceptanceCriteria": [
+        "Renders HTML5 canvas element",
+        "Loads image from src prop using Image API",
+        "Draws image scaled to canvas dimensions",
+        "Width/height props with defaults: 360x640 mobile, 800x600 desktop",
+        "Applies CSS filters: brightness(), contrast(), saturate(), blur()",
+        "Rerenders on filter changes via useEffect",
+        "Supports ref forwarding with getImageData/toDataURL methods"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/PhotoCanvas.tsx",
+          "operation": "modify",
+          "description": "Update the existing PhotoCanvas component to render an HTML5 canvas element, load image from src prop using Image API, draw image scaled to canvas dimensions using canvas 2D context, accept width/height props with defaults (360x640 for mobile, 800x600 for desktop), apply CSS filters from filters prop (brightness(), contrast(), saturate(), blur()) to the canvas element style, rerender canvas on filter or stickers changes via useEffect, and support ref forwarding using forwardRef and useImperativeHandle to expose getImageData and toDataURL methods for external canvas access. Ensure stickers are drawn on the canvas as well."
+        }
+      ]
+    },
+    {
+      "id": "REQ-236",
+      "summary": "Implement MobilePhotoEditor component with vertical layout and filter controls",
+      "acceptanceCriteria": [
+        "Vertical layout with PhotoCanvas at top",
+        "PhotoCanvas: w-full, h-auto max-h-[60vh]",
+        "Filter toolbar with horizontal scroll",
+        "Filter buttons: Brightness, Contrast, Saturation, Blur",
+        "Buttons call photoEditorStore.updateFilter",
+        "File upload input styled as button",
+        "Glassmorphism panel: bg-white/10 backdrop-blur-xl p-4 rounded-xl",
+        "Dark background (bg-black), white text with shadows",
+        "Connected to photoEditorStore"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MobilePhotoEditor.tsx",
+          "operation": "modify",
+          "description": "Update the existing MobilePhotoEditor component to implement a vertical layout with PhotoCanvas component at top (w-full h-auto max-h-[60vh]), filter toolbar below with horizontal scroll containing filter buttons for Brightness, Contrast, Saturation, and Blur that call photoEditorStore.updateFilter action when clicked, and a file upload input styled as a button for image selection that calls photoEditorStore.setImage. Wrap everything in a glassmorphism panel (bg-white/10 backdrop-blur-xl p-4 rounded-xl border border-white/20), use dark background (bg-black), white text (text-white) with shadows (shadow-lg), and connect to photoEditorStore using Zustand hooks to access image, filters, and stickers state."
+        }
+      ]
+    },
+    {
+      "id": "REQ-237",
+      "summary": "Implement DesktopPhotoEditor component with horizontal layout and side panels",
+      "acceptanceCriteria": [
+        "Horizontal layout with top menu bar (h-12 bg-gray-900)",
+        "Menu buttons: File, Edit, Export",
+        "Center PhotoCanvas (flex-1) for image display",
+        "Right side panel (w-80) with FiltersPanel and StickersPanel",
+        "FiltersPanel with range sliders: brightness/contrast/saturation 0-200, blur 0-10",
+        "StickersPanel with grid of sticker buttons",
+        "Glassmorphism panels: bg-white/10 backdrop-blur-xl rounded-xl border-white/20",
+        "Connected to photoEditorStore"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/DesktopPhotoEditor.tsx",
+          "operation": "modify",
+          "description": "Update the existing DesktopPhotoEditor component to implement a horizontal layout with top menu bar (h-12 bg-gray-900) containing File, Edit, and Export buttons, center area with PhotoCanvas component (flex-1) for image display, and right side panel (w-80) containing FiltersPanel with labeled range sliders (brightness/contrast/saturation 0-200, blur 0-10) and StickersPanel with grid of sticker buttons. Apply glassmorphism styling to panels (bg-white/10 backdrop-blur-xl rounded-xl border border-white/20), and connect to photoEditorStore using Zustand hooks. Add file upload functionality in the menu bar for loading images."
+        }
+      ]
+    },
+    {
+      "id": "REQ-238",
+      "summary": "Create FiltersPanel component with range sliders and reset functionality",
+      "acceptanceCriteria": [
+        "Glassmorphism styling: bg-white/10 backdrop-blur-xl p-4 rounded-xl",
+        "Range sliders: brightness (0-200, default 100), contrast (0-200, default 100), saturation (0-200, default 100), blur (0-10, default 0)",
+        "Each slider calls photoEditorStore.updateFilter on change",
+        "Reset all button calls resetFilters action",
+        "Real-time value display next to each slider",
+        "White text with proper contrast for visibility"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/FiltersPanel.tsx",
+          "operation": "modify",
+          "description": "Update the existing FiltersPanel component to ensure glassmorphism panel styling (bg-white/10 backdrop-blur-xl p-4 rounded-xl border border-white/20), labeled range sliders for brightness (0-200, default 100), contrast (0-200, default 100), saturation (0-200, default 100), and blur (0-10, default 0) where each slider calls photoEditorStore.updateFilter on change, a reset all button that calls photoEditorStore.resetFilters action, real-time value display next to each slider showing the current numeric value, and white text (text-white) with proper contrast (shadow-lg) for visibility on glassmorphism backgrounds. Connect to photoEditorStore using Zustand hooks."
+        }
+      ]
+    },
+    {
+      "id": "REQ-239",
+      "summary": "Create StickersPanel component with emoji sticker grid",
+      "acceptanceCriteria": [
+        "Glassmorphism styling: bg-white/10 backdrop-blur-xl p-4 rounded-xl",
+        "Grid layout: grid-cols-4 gap-2",
+        "Emoji/sticker buttons: 😀 😎 ❤️ 🔥 ⭐ 👍 🎉 🎨",
+        "Click handler calls photoEditorStore.addSticker",
+        "Sticker data: src (emoji), x/y (canvas center), size 64x64",
+        "White text for visibility",
+        "Basic sticker management UI"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/StickersPanel.tsx",
+          "operation": "modify",
+          "description": "Update the existing StickersPanel component to ensure glassmorphism panel styling (bg-white/10 backdrop-blur-xl p-4 rounded-xl border border-white/20), grid layout (grid-cols-4 gap-2) displaying emoji/sticker buttons (😀 😎 ❤️ 🔥 ⭐ 👍 🎉 🎨), click handler that calls photoEditorStore.addSticker action with sticker data including src (the emoji as string), x/y position at canvas center (calculated based on canvas dimensions), and default size 64x64. Use white text (text-white) for visibility and add basic sticker management UI showing added stickers. Connect to photoEditorStore using Zustand hooks."
+        }
+      ]
+    },
+    {
+      "id": "REQ-240",
+      "summary": "Create responsive PhotoEditor page with conditional mobile/desktop rendering",
+      "acceptanceCriteria": [
+        "Uses useMediaQuery('(min-width: 1024px)') to detect screen width",
+        "Renders MobilePhotoEditor for screens < 1024px",
+        "Renders DesktopPhotoEditor for screens >= 1024px",
+        "Both layouts share photoEditorStore",
+        "Includes ThreeBackground component",
+        "Shows NavbarDesktop on desktop, MobileBottomNav on mobile"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/PhotoEditor.tsx",
+          "operation": "modify",
+          "description": "Update the existing PhotoEditor page component to use useMediaQuery('(min-width: 1024px)') hook to detect screen width and conditionally render MobilePhotoEditor component for screens < 1024px or DesktopPhotoEditor component for screens >= 1024px. Both layouts share the same photoEditorStore for state management. Include ThreeBackground component for the animated background, NavbarDesktop for desktop screens, and MobileBottomNav for mobile screens. Ensure proper responsive layout and navigation integration."
+        }
+      ]
+    },
+    {
+      "id": "REQ-241",
+      "summary": "Update Router to register video and photo editor routes with PageTransition",
+      "acceptanceCriteria": [
+        "/editor/video route points to responsive VideoEditor component",
+        "/editor/photo route points to responsive PhotoEditor component",
+        "Both routes wrapped with PageTransition component",
+        "All existing AI tool routes (/ai/*) preserved",
+        "Home page route (/) preserved",
+        "No separate mobile/desktop routes created"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/Router.tsx",
+          "operation": "modify",
+          "description": "Update the existing Router.tsx to ensure /editor/video route points to the responsive VideoEditor component and /editor/photo route points to the responsive PhotoEditor component. Both routes should be wrapped with the PageTransition component for consistent 3D navigation effects. Preserve all existing AI tool routes (/ai/*) and the home page route (/). Do not create separate mobile/desktop routes; the responsive components handle layout internally using useMediaQuery."
+        }
+      ]
+    },
+    {
+      "id": "REQ-242",
+      "summary": "Update Home page Photo Edit card to navigate to photo editor route",
+      "acceptanceCriteria": [
+        "Photo Edit card navigates to /editor/photo route",
+        "All other elements remain unchanged",
+        "ThreeBackground, SearchBar, RecentProjects preserved",
+        "Create section (Video Edit, Photo Edit, Auto Cut) preserved",
+        "AI Tools section preserved",
+        "Templates section preserved",
+        "NavbarDesktop and MobileBottomNav preserved",
+        "No styling, layout, or functionality changes to existing elements"
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/Home.tsx",
           "operation": "modify",
-          "description": "Update to display all 50+ AI tools organized by 8 categories (Generation AI with 8 tools, Editing AI with 3 tools, Enhancement AI with 7 tools, Creator AI with 8 tools, Assistant AI with 2 tools, Growth AI with 7 tools, Experimental AI with 8 tools, System AI with backend features note) as expandable/collapsible category sections. Add category headers showing category icon, name, tool count badge, and expand/collapse chevron icon. Implement category content as responsive grid (grid-cols-4 gap-6 on desktop, grid-cols-2 gap-4 on mobile) of AIToolCard components. Apply category-specific color themes matching established OKLCH palette. Manage expand/collapse state with React useState and add smooth height transitions using CSS transition classes."
+          "description": "Update the existing Home page component to change the Photo Edit card navigation from placeholder to /editor/photo route using router.navigate or Link component. Keep all other elements (ThreeBackground, SearchBar, RecentProjects, Create section with Video Edit and Auto Cut cards, AI Tools section, Templates section, NavbarDesktop, MobileBottomNav) exactly as they currently are with no changes to styling, layout, or functionality. Only modify the onClick or href for the Photo Edit card."
+        }
+      ]
+    },
+    {
+      "id": "REQ-243",
+      "summary": "Ensure consistent glassmorphism styling across all editor components",
+      "acceptanceCriteria": [
+        "All glassmorphism panels use bg-white/10",
+        "backdrop-blur-xl applied for blur effect",
+        "rounded-xl border radius (12px)",
+        "border border-white/20 for subtle edges",
+        "Appropriate padding (p-4 or p-6)",
+        "White text (text-white) with shadow-lg",
+        "Consistent styling across all 4 editor components",
+        "High text visibility on glassmorphism backgrounds"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MobileVideoEditor.tsx",
+          "operation": "modify",
+          "description": "Review and ensure all glassmorphism panels in MobileVideoEditor use consistent styling: bg-white/10 background with 10% opacity, backdrop-blur-xl for blur effect, rounded-xl border radius (12px), border border-white/20 for subtle edge definition, appropriate padding (p-4 or p-6), white text (text-white), and text shadows (shadow-lg) for high contrast on glassmorphism backgrounds."
         },
         {
-          "path": "frontend/src/data/homeSections.ts",
+          "path": "frontend/src/components/DesktopVideoEditor.tsx",
           "operation": "modify",
-          "description": "Expand AI tool categories data structure to include all 50+ tools organized across 8 categories with complete metadata (name, description, route, icon, category) for each tool. Ensure all tools from aiJob.ts types are represented with consistent naming and routing paths."
+          "description": "Review and ensure all glassmorphism panels in DesktopVideoEditor use consistent styling: bg-white/10 background with 10% opacity, backdrop-blur-xl for blur effect, rounded-xl border radius (12px), border border-white/20 for subtle edge definition, appropriate padding (p-4 or p-6), white text (text-white), and text shadows (shadow-lg) for high contrast on glassmorphism backgrounds."
+        },
+        {
+          "path": "frontend/src/components/MobilePhotoEditor.tsx",
+          "operation": "modify",
+          "description": "Review and ensure all glassmorphism panels in MobilePhotoEditor use consistent styling: bg-white/10 background with 10% opacity, backdrop-blur-xl for blur effect, rounded-xl border radius (12px), border border-white/20 for subtle edge definition, appropriate padding (p-4 or p-6), white text (text-white), and text shadows (shadow-lg) for high contrast on glassmorphism backgrounds."
+        },
+        {
+          "path": "frontend/src/components/DesktopPhotoEditor.tsx",
+          "operation": "modify",
+          "description": "Review and ensure all glassmorphism panels in DesktopPhotoEditor use consistent styling: bg-white/10 background with 10% opacity, backdrop-blur-xl for blur effect, rounded-xl border radius (12px), border border-white/20 for subtle edge definition, appropriate padding (p-4 or p-6), white text (text-white), and text shadows (shadow-lg) for high contrast on glassmorphism backgrounds."
+        },
+        {
+          "path": "frontend/src/components/FiltersPanel.tsx",
+          "operation": "modify",
+          "description": "Review and ensure the FiltersPanel component uses consistent glassmorphism styling: bg-white/10 background with 10% opacity, backdrop-blur-xl for blur effect, rounded-xl border radius (12px), border border-white/20 for subtle edge definition, appropriate padding (p-4), white text (text-white), and text shadows (shadow-lg) for high contrast on glassmorphism backgrounds."
+        },
+        {
+          "path": "frontend/src/components/StickersPanel.tsx",
+          "operation": "modify",
+          "description": "Review and ensure the StickersPanel component uses consistent glassmorphism styling: bg-white/10 background with 10% opacity, backdrop-blur-xl for blur effect, rounded-xl border radius (12px), border border-white/20 for subtle edge definition, appropriate padding (p-4), white text (text-white), and text shadows (shadow-lg) for high contrast on glassmorphism backgrounds."
         }
       ]
     }

@@ -4,10 +4,10 @@ import Array "mo:core/Array";
 import Iter "mo:core/Iter";
 import Nat "mo:core/Nat";
 import VarArray "mo:core/VarArray";
-import Migration "migration";
+
 import Runtime "mo:core/Runtime";
 
-(with migration = Migration.run)
+
 actor {
   type JobId = Nat;
   type DeviceId = Text;

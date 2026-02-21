@@ -5,6 +5,11 @@ import { TimelineEngine } from '../engine/TimelineEngine';
 import { CoreEngine } from '../engine/CoreEngine';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import { VideoPlayer } from './VideoPlayer';
+
+interface PreviewProps {
+  isMobile?: boolean;
+}
 
 function ClipRenderer({ clip, time }: { clip: any; time: number }) {
   const coreEngine = useMemo(() => new CoreEngine(), []);
@@ -125,7 +130,22 @@ function Scene() {
   );
 }
 
-export default function Preview() {
+export default function Preview({ isMobile = false }: PreviewProps) {
+  const { tracks, time } = useEditorStore();
+
+  // Get first active video clip for mobile HTML5 player
+  const activeVideoClip = tracks
+    .flatMap(track => track.clips)
+    .find(clip => clip.type === 'video' && clip.start <= time && clip.start + clip.duration >= time);
+
+  if (isMobile && activeVideoClip?.mediaUrl) {
+    return (
+      <div className="w-full h-full max-w-4xl max-h-[600px] rounded-lg overflow-hidden">
+        <VideoPlayer src={activeVideoClip.mediaUrl} />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full max-w-4xl max-h-[600px] rounded-lg overflow-hidden border-2 border-teal-500/30 bg-gray-950 shadow-2xl shadow-teal-500/20">
       <Canvas>

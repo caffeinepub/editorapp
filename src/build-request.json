@@ -1,287 +1,342 @@
 {
   "kind": "build_request",
-  "title": "Complete AI Tool Implementation with Full Mock Data and Backend Integration",
-  "projectName": "Caffeine Video Editor",
+  "title": "Complete responsive video and photo editors with mobile/desktop layouts",
+  "projectName": "Ultimate Video & Photo Editor",
   "priority": "high",
   "requirements": [
     {
-      "id": "REQ-181",
-      "text": "Update backend/main.mo AIJobManager actor to implement complete job processing pipeline with submitJob method accepting AIJob JSON payload and assigning unique job IDs using stable variable nextJobId, storing jobs in stable variable jobQueue as HashMap<Text, AIJob>, returning job ID to caller, processNextJob method dequeuing highest priority job and updating status to 'processing', getJobStatus query returning current status for given job ID, and getJobResults query returning completed job results with proper error handling",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "complete all the AI tool implementations with full mock data and API integration points"
-        ]
-      },
-      "acceptanceCriteria": [
-        "submitJob method accepts JSON payload and returns unique job ID",
-        "Jobs stored in stable HashMap with job ID as key",
-        "processNextJob dequeues and updates status correctly",
-        "getJobStatus returns current status for any job ID",
-        "getJobResults returns completed results or error message"
-      ]
-    },
-    {
-      "id": "REQ-182",
-      "text": "Implement AI caching system in backend/main.mo with stable variable cacheStore as HashMap<Text, CachedResult> mapping job hash (computed from job type + payload using SHA256 or Text.hash) to CachedResult record containing result data and timestamp, cache hit logic checking cacheStore before processing new jobs, cache invalidation automatically expiring entries older than 24 hours on query, and getCachedResult query method returning cached data if available",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "Complete Backend (Motoko): AI caching system with 24-hour expiration"
-        ]
-      },
-      "acceptanceCriteria": [
-        "CachedResult type includes result data and timestamp",
-        "Job hash computed consistently from type and payload",
-        "Cache checked before processing new jobs",
-        "Entries older than 24 hours automatically invalidated",
-        "getCachedResult query returns cached data when available"
-      ]
-    },
-    {
-      "id": "REQ-183",
-      "text": "Implement smart job scheduling in backend/main.mo with priority calculation function assigning higher priority to interactive jobs (enhance, upscale, highlight.detect) over batch jobs (export, video.generate), premium users over free users (using mock tier system), and shorter estimated processing time over longer, priority queue implementation using sorted array in stable variable with insertWithPriority method, and schedule method reordering queue based on priority scores",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "Smart job scheduling with priority queue"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Priority calculation considers job type, user tier, and processing time",
-        "Interactive jobs prioritized over batch jobs",
-        "Priority queue maintains sorted order",
-        "insertWithPriority correctly positions jobs in queue",
-        "schedule method reorders queue dynamically"
-      ]
-    },
-    {
-      "id": "REQ-184",
-      "text": "Implement device-aware quality optimization in backend/main.mo with stable variable deviceProfiles storing device capabilities (deviceId, cpu cores count, gpu tier, ram GB, connectionSpeed Mbps), registerDevice method saving device profile, getOptimalQuality method selecting quality preset ('low'|'medium'|'high') based on device capabilities comparing against thresholds (low: <4 cores or <4GB RAM, medium: 4-8 cores and 4-8GB RAM, high: >8 cores and >8GB RAM), and automatic quality downgrade logic for low-end devices",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "Device-aware quality optimization"
-        ]
-      },
-      "acceptanceCriteria": [
-        "DeviceProfile type includes cpu, gpu, ram, connectionSpeed",
-        "registerDevice stores device capabilities",
-        "getOptimalQuality returns appropriate quality preset",
-        "Quality thresholds correctly categorize devices",
-        "Automatic downgrade applies to low-end devices"
-      ]
-    },
-    {
-      "id": "REQ-185",
-      "text": "Implement lag prediction and avoidance system in backend/main.mo with stable variable performanceMetrics as array of ProcessingMetric records tracking jobType, processingTimeMs, deviceId, and timestamp, predictLagRisk method analyzing current queue load (length), recent processing times (last 10 jobs), and device capabilities to return risk score (0-100), and preventiveFallback method automatically triggering quality downgrade when risk score exceeds 70",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "Lag prediction & avoidance"
-        ]
-      },
-      "acceptanceCriteria": [
-        "ProcessingMetric type tracks job processing data",
-        "performanceMetrics stores historical data",
-        "predictLagRisk calculates risk score based on queue and metrics",
-        "Risk score ranges from 0-100",
-        "preventiveFallback triggers at risk > 70"
-      ]
-    },
-    {
-      "id": "REQ-186",
-      "text": "Implement auto fallback system in backend/main.mo with stable variable fallbackConfig storing fallback strategies for each job type, detectFailure method monitoring job execution for timeout (>5 minutes), errors, or resource exhaustion, fallback strategy execution including retry with lower quality (attempt 1), switch to alternative processing (attempt 2), use cached similar result (attempt 3), and abort with notification (attempt 4), and activateFallback method executing appropriate strategy based on failure type and attempt count",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "Auto fallback modes with retry strategies"
-        ]
-      },
-      "acceptanceCriteria": [
-        "FallbackConfig defines strategies for each job type",
-        "detectFailure identifies timeout, errors, and resource issues",
-        "Four-stage fallback strategy implemented",
-        "activateFallback selects strategy based on failure and attempts",
-        "Fallback logs and notifies user appropriately"
-      ]
-    },
-    {
-      "id": "REQ-187",
-      "text": "Update aiService.ts in frontend/src/services/aiService.ts to implement complete mock AI functions for all 50+ job types with realistic placeholder data: mockVoiceClone returning {audioUrl: string, voiceId: string, sampleRate: number}, mockMusicGenerate returning {audioUrl: string, duration: number, bpm: number, waveform: number[]}, mockBRollGenerate returning {videoUrl: string, scenes: Array<{start: number, end: number, description: string}>}, mockLogoGenerate returning {logos: Array<{url: string, variant: string}>}, mockStickerGenerate returning {imageUrl: string, transparent: boolean}, mockCharacterGenerate returning {images: Array<{url: string, pose: string}>, consistency: number}, and similar structured responses for all remaining 43+ job types",
+      "id": "REQ-228",
+      "text": "Create useMediaQuery custom hook in frontend/src/hooks/useMediaQuery.ts that accepts media query string parameter, uses window.matchMedia API to check initial match status, listens for changes using matchMedia.addListener or addEventListener('change'), updates boolean match state on change, cleans up listener on unmount using removeEventListener, and returns current match status boolean",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
+          "msg-user-start-building"
         ],
         "quotes": [
-          "All mock AI functions returning realistic placeholder data"
+          "Start building"
         ]
       },
       "acceptanceCriteria": [
-        "Mock functions for all 50+ job types implemented",
-        "Each mock returns structured data matching expected format",
-        "Data includes realistic values (URLs, scores, timestamps)",
-        "Mock responses simulate processing delay (500-2000ms)",
-        "All mocks return consistent data shapes"
+        "Hook accepts media query string as parameter (e.g., '(min-width: 1024px)')",
+        "Uses window.matchMedia API to check match status",
+        "Returns boolean indicating current match status",
+        "Updates state on window resize/orientation change",
+        "Cleans up event listener on component unmount"
       ]
     },
     {
-      "id": "REQ-188",
-      "text": "Add API integration points to aiService.ts for all external AI providers with configuration objects: elevenlabsConfig for voice cloning {apiKey: string, voiceId: string, stability: number, similarity: number}, replicateConfig for image/video generation {apiKey: string, models: {image: string, video: string}}, runwayConfig for motion AI {apiKey: string, projectId: string}, huggingfaceConfig for NLP tasks {apiKey: string, models: Record<string, string>}, openaiConfig for GPT tasks {apiKey: string, model: string, temperature: number}, and provider-specific request handlers with error handling, retry logic (3 attempts with exponential backoff), and timeout handling (30s timeout)",
+      "id": "REQ-229",
+      "text": "Create responsive VideoEditor component at /editor/video route in frontend/src/pages/VideoEditor.tsx that uses useMediaQuery('(min-width: 1024px)') to detect screen width and conditionally renders MobileVideoEditor component for screens < 1024px or DesktopVideoEditor component for screens >= 1024px, both sharing the same editorStore state, timeline engine, keyframe system, and all 50+ AI tools",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "API integration points for Replicate, Hugging Face, and custom endpoints"
+          "msg-user-start-building"
         ]
       },
       "acceptanceCriteria": [
-        "Configuration objects for all 6+ AI providers",
-        "Request handlers for each provider implemented",
-        "Error handling with descriptive messages",
-        "Retry logic with exponential backoff (3 attempts)",
-        "30-second timeout for all API calls"
+        "Uses useMediaQuery hook to detect 1024px breakpoint",
+        "Renders MobileVideoEditor for mobile screens",
+        "Renders DesktopVideoEditor for desktop screens",
+        "Both layouts share same editorStore state",
+        "Both layouts access same timeline engine and keyframe system",
+        "All 50+ AI tools available in both layouts"
       ]
     },
     {
-      "id": "REQ-189",
-      "text": "Update useAIJob hook in frontend/src/hooks/useAIJob.ts to implement comprehensive job lifecycle management for all 50+ job types with submitAIJob function using React Query mutation calling backend submitJob, status polling using React Query with configurable 2-second interval checking job status until 'completed' or 'failed', result retrieval calling backend getJobResults when status is 'completed', automatic asset integration for Generation AI jobs (image.generate, video.generate, voice.clone, music.generate, broll.generate, logo.generate, sticker.generate, character.generate) adding results to asset library with metadata, automatic timeline integration for Editing/Creator AI jobs creating new clips/layers with proper timing and transforms, and category-specific success notifications with action buttons (View in Assets, View on Timeline, Apply Changes, Download)",
+      "id": "REQ-230",
+      "text": "Create VideoPlayer component in frontend/src/components/VideoPlayer.tsx that renders HTML5 video element with src prop, implements centered play/pause overlay button with icon, tracks currentTime state via timeupdate event, calls onTimeUpdate callback prop with current time value, calls onPlay and onPause callback props, supports ref forwarding for external control with play/pause/seek/getCurrentTime methods, and applies basic styling (width 100%, rounded-xl, bg-black)",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "Full job lifecycle management in useAIJob hook"
+          "msg-user-start-building"
         ]
       },
       "acceptanceCriteria": [
-        "submitAIJob handles all 50+ job types",
-        "Status polling checks every 2 seconds until completion",
-        "Results retrieved automatically on completion",
-        "Generation AI results added to asset library",
-        "Editing/Creator AI results integrated into timeline",
-        "Category-specific notifications with appropriate actions"
+        "Renders HTML5 video element with src prop",
+        "Displays centered play/pause overlay button",
+        "Tracks currentTime via timeupdate event",
+        "Calls onTimeUpdate callback with time value",
+        "Supports ref forwarding with control methods",
+        "Applies styling: width 100%, rounded-xl, bg-black"
       ]
     },
     {
-      "id": "REQ-190",
-      "text": "Update AIAssistant component in frontend/src/components/AIAssistant.tsx to add command interface panel with quick command buttons section displaying 10 glassmorphism buttons ('Make this cinematic', 'Fix color and audio', 'Turn into viral reel', 'Optimize for YouTube', 'Add motion blur', 'Balance exposure', 'Remove background noise', 'Add dynamic transitions', 'Enhance faces', 'Generate captions'), command input field with autocomplete dropdown showing matching commands from aiKnowledgeBase as user types, command history panel showing last 20 executed commands with timestamps and result summaries, and command execution handler mapping commands to appropriate AI job submissions (command.cinematic, command.fixColorAudio, command.viralReel) with automatic parameter inference from editor context (selected clips, project settings)",
+      "id": "REQ-231",
+      "text": "Implement MobileVideoEditor component in frontend/src/components/MobileVideoEditor.tsx with CapCut-inspired vertical layout: VideoPlayer component at top (width 100%, aspect ratio 16:9) with play/pause overlay controls and audio support, Timeline component in middle section showing horizontal scrolling clips, touch-optimized Toolbar at bottom with large tap targets (min 48px height) for quick actions (Trim, Split, Text, Stickers, Music, Filters, Effects, AI), all panels using glassmorphism styling (bg-white/10 backdrop-blur-xl rounded-xl), white text with text shadows for visibility, and connected to editorStore for state management",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "Command interface in AIAssistant with 10 quick commands"
+          "msg-user-start-building"
         ]
       },
       "acceptanceCriteria": [
-        "10 quick command buttons with glassmorphism styling",
-        "Autocomplete shows matching commands as user types",
-        "Command history displays last 20 commands",
-        "Commands map to appropriate AI jobs",
-        "Context automatically inferred from editor state"
+        "Vertical layout with VideoPlayer at top",
+        "Timeline component with horizontal scrolling",
+        "Touch-optimized Toolbar with large tap targets (min 48px)",
+        "Quick action buttons: Trim, Split, Text, Stickers, Music, Filters, Effects, AI",
+        "Glassmorphism styling: bg-white/10 backdrop-blur-xl rounded-xl",
+        "White text with shadows for visibility on glassmorphism",
+        "Connected to editorStore for state management"
       ]
     },
     {
-      "id": "REQ-191",
-      "text": "Update AIJobStatus component in frontend/src/components/AIJobStatus.tsx to support all 50+ job types with jobTypeMapping object defining icon, label, and category for each job type, category filter dropdown allowing users to filter by AI category (All, Generation, Editing, Enhancement, Creator, Assistant, Growth, Experimental), color-coded progress bars using category-specific colors (Generation: purple, Editing: blue, Enhancement: green, Creator: orange, Assistant: cyan, Growth: pink, Experimental: red), expanded job details panel showing job configuration parameters and payload data in formatted JSON, and real-time status updates using React Query with 2-second refresh interval",
+      "id": "REQ-232",
+      "text": "Implement DesktopVideoEditor component in frontend/src/components/DesktopVideoEditor.tsx with After Effects-inspired horizontal layout: top menu bar (h-12) with File/Edit/Composition/Effects/Render buttons, left preview area (flex-1) using existing Preview component with WebGL/Three.js rendering pipeline for GPU-accelerated effects, right side panel (w-80) with stacked Layers and Effects panels showing clip properties, bottom Timeline component (h-64) with keyframe editing capability, all using glassmorphism panels (bg-white/10 backdrop-blur-xl rounded-xl border border-white/20), dark theme (bg-black), and white text with proper contrast",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "Enhanced AIJobStatus with filtering and real-time updates"
+          "msg-user-start-building"
         ]
       },
       "acceptanceCriteria": [
-        "jobTypeMapping covers all 50+ job types",
-        "Category filter dropdown functional",
-        "Progress bars color-coded by category",
-        "Expanded details show formatted job configuration",
-        "Status updates refresh every 2 seconds"
+        "Horizontal layout with top menu bar (h-12)",
+        "Menu buttons: File, Edit, Composition, Effects, Render",
+        "Left preview area using existing Preview component with WebGL/Three.js",
+        "Right side panel (w-80) with Layers and Effects panels",
+        "Bottom Timeline component (h-64) with keyframe editing",
+        "Glassmorphism panels: bg-white/10 backdrop-blur-xl rounded-xl border-white/20",
+        "Dark theme (bg-black) with white text for visibility"
       ]
     },
     {
-      "id": "REQ-192",
-      "text": "Update Home page component in frontend/src/pages/Home.tsx to display all 50+ AI tools organized by 8 categories (Generation AI with 8 tools, Editing AI with 3 tools, Enhancement AI with 7 tools, Creator AI with 8 tools, Assistant AI with 2 tools, Growth AI with 7 tools, Experimental AI with 8 tools, System AI with backend features) as expandable/collapsible category sections with category headers showing category icon, name, tool count badge, and expand/collapse chevron icon, category content as responsive grid (grid-cols-4 gap-6 on desktop, grid-cols-2 gap-4 on mobile) of AIToolCard components, category-specific color themes matching established palette, expand/collapse state managed with React useState, and smooth height transitions using CSS transitions",
+      "id": "REQ-233",
+      "text": "Update existing Preview component in frontend/src/components/Preview.tsx to detect render mode based on isMobile prop: when isMobile is true, render VideoPlayer component with first active video clip's URL from timeline; when isMobile is false, use existing WebGL/Three.js rendering pipeline with CoreEngine transforms and effects; both modes should display same active clips from timeline at current time position using TimelineEngine.getActiveClips",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "Category-organized Home page with all 50+ tools"
+          "msg-user-start-building"
         ]
       },
       "acceptanceCriteria": [
-        "All 8 AI categories displayed with tools",
-        "Category headers show icon, name, and count",
-        "Expand/collapse functionality works smoothly",
-        "Responsive grid adapts to screen size",
-        "Category colors match established theme"
+        "Accepts isMobile boolean prop",
+        "When isMobile=true, renders VideoPlayer with first active video clip URL",
+        "When isMobile=false, uses existing WebGL/Three.js rendering pipeline",
+        "Both modes display active clips from timeline at current time",
+        "Uses TimelineEngine.getActiveClips to get active clips",
+        "Applies CoreEngine transforms when using WebGL mode"
       ]
     },
     {
-      "id": "REQ-193",
-      "text": "Create migration.mo file in backend directory with proper state migration logic preserving existing AIJobManager data structures including jobQueue, cacheStore, deviceProfiles, performanceMetrics, and fallbackConfig using stable variable migration pattern with preupgrade and postupgrade system functions, OldState type containing previous state shape with basic job queue, and NewState type with expanded state including all AI system features (caching, scheduling, device profiles, metrics, fallback), and migration function transferring data from old to new format with proper type conversions",
-      "target": "backend",
+      "id": "REQ-234",
+      "text": "Create photoEditorStore in frontend/src/store/photoEditorStore.ts using Zustand with state properties: imageUrl (string | null), filters object with brightness/contrast/saturation (0-200 range, default 100) and blur (0-10 range, default 0), stickers array with objects containing id, src, x, y, width, height, and actions: setImage(url), updateFilter(filterName, value), addSticker(sticker), updateSticker(id, updates), removeSticker(id), resetFilters()",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-final"
-        ],
-        "quotes": [
-          "proper state migration logic"
+          "msg-user-start-building"
         ]
       },
       "acceptanceCriteria": [
-        "preupgrade saves current state before upgrade",
-        "postupgrade restores state after upgrade",
-        "OldState and NewState types defined",
-        "Migration function transfers all data",
-        "Type conversions handle format changes"
+        "Uses Zustand for state management",
+        "State includes imageUrl (string | null)",
+        "Filters object: brightness, contrast, saturation (0-200, default 100), blur (0-10, default 0)",
+        "Stickers array with id, src, x, y, width, height",
+        "Actions: setImage, updateFilter, addSticker, updateSticker, removeSticker, resetFilters",
+        "Actions properly update state immutably"
+      ]
+    },
+    {
+      "id": "REQ-235",
+      "text": "Implement PhotoCanvas component in frontend/src/components/PhotoCanvas.tsx that renders HTML5 canvas element, loads image from src prop using Image API, draws image scaled to canvas dimensions (width/height props with defaults 360x640 for mobile, 800x600 for desktop), applies CSS filters from filters prop (brightness(), contrast(), saturate(), blur()), rerenders canvas on filter changes via useEffect, and supports ref forwarding for external canvas access with getImageData/toDataURL methods",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-start-building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Renders HTML5 canvas element",
+        "Loads image from src prop using Image API",
+        "Draws image scaled to canvas dimensions",
+        "Width/height props with defaults: 360x640 mobile, 800x600 desktop",
+        "Applies CSS filters: brightness(), contrast(), saturate(), blur()",
+        "Rerenders on filter changes via useEffect",
+        "Supports ref forwarding with getImageData/toDataURL methods"
+      ]
+    },
+    {
+      "id": "REQ-236",
+      "text": "Implement MobilePhotoEditor component in frontend/src/components/MobilePhotoEditor.tsx with vertical layout: PhotoCanvas at top (w-full, h-auto max-h-[60vh]), filter toolbar below with horizontal scroll of filter buttons (Brightness/Contrast/Saturation/Blur) calling photoEditorStore.updateFilter action, file upload input styled as button for image selection, all in glassmorphism panel (bg-white/10 backdrop-blur-xl p-4 rounded-xl), dark background (bg-black), white text with shadows, and connected to photoEditorStore",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-start-building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Vertical layout with PhotoCanvas at top",
+        "PhotoCanvas: w-full, h-auto max-h-[60vh]",
+        "Filter toolbar with horizontal scroll",
+        "Filter buttons: Brightness, Contrast, Saturation, Blur",
+        "Buttons call photoEditorStore.updateFilter",
+        "File upload input styled as button",
+        "Glassmorphism panel: bg-white/10 backdrop-blur-xl p-4 rounded-xl",
+        "Dark background (bg-black), white text with shadows",
+        "Connected to photoEditorStore"
+      ]
+    },
+    {
+      "id": "REQ-237",
+      "text": "Implement DesktopPhotoEditor component in frontend/src/components/DesktopPhotoEditor.tsx with horizontal layout: top menu bar (h-12 bg-gray-900) with File/Edit/Export buttons, center PhotoCanvas (flex-1) with image display, right side panel (w-80) containing FiltersPanel with labeled range sliders (brightness/contrast/saturation 0-200, blur 0-10) and StickersPanel with grid of sticker buttons, all using glassmorphism panels (bg-white/10 backdrop-blur-xl rounded-xl border-white/20) and connected to photoEditorStore",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-start-building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Horizontal layout with top menu bar (h-12 bg-gray-900)",
+        "Menu buttons: File, Edit, Export",
+        "Center PhotoCanvas (flex-1) for image display",
+        "Right side panel (w-80) with FiltersPanel and StickersPanel",
+        "FiltersPanel with range sliders: brightness/contrast/saturation 0-200, blur 0-10",
+        "StickersPanel with grid of sticker buttons",
+        "Glassmorphism panels: bg-white/10 backdrop-blur-xl rounded-xl border-white/20",
+        "Connected to photoEditorStore"
+      ]
+    },
+    {
+      "id": "REQ-238",
+      "text": "Create FiltersPanel component in frontend/src/components/FiltersPanel.tsx with glassmorphism panel styling (bg-white/10 backdrop-blur-xl p-4 rounded-xl), labeled range sliders for brightness (0-200, default 100), contrast (0-200, default 100), saturation (0-200, default 100), blur (0-10, default 0), each slider calling photoEditorStore.updateFilter on change, reset all button calling resetFilters action, real-time value display next to each slider, and white text with proper contrast",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-start-building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Glassmorphism styling: bg-white/10 backdrop-blur-xl p-4 rounded-xl",
+        "Range sliders: brightness (0-200, default 100), contrast (0-200, default 100), saturation (0-200, default 100), blur (0-10, default 0)",
+        "Each slider calls photoEditorStore.updateFilter on change",
+        "Reset all button calls resetFilters action",
+        "Real-time value display next to each slider",
+        "White text with proper contrast for visibility"
+      ]
+    },
+    {
+      "id": "REQ-239",
+      "text": "Create StickersPanel component in frontend/src/components/StickersPanel.tsx with glassmorphism panel styling (bg-white/10 backdrop-blur-xl p-4 rounded-xl), grid layout (grid-cols-4 gap-2) showing emoji/sticker buttons (😀 😎 ❤️ 🔥 ⭐ 👍 🎉 🎨), click handler calling photoEditorStore.addSticker action with sticker data (src as emoji, initial x/y position at center of canvas, default size 64x64), white text, and basic sticker management UI",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-start-building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Glassmorphism styling: bg-white/10 backdrop-blur-xl p-4 rounded-xl",
+        "Grid layout: grid-cols-4 gap-2",
+        "Emoji/sticker buttons: 😀 😎 ❤️ 🔥 ⭐ 👍 🎉 🎨",
+        "Click handler calls photoEditorStore.addSticker",
+        "Sticker data: src (emoji), x/y (canvas center), size 64x64",
+        "White text for visibility",
+        "Basic sticker management UI"
+      ]
+    },
+    {
+      "id": "REQ-240",
+      "text": "Create responsive PhotoEditor component at /editor/photo route in frontend/src/pages/PhotoEditor.tsx that detects screen width using useMediaQuery('(min-width: 1024px)') and conditionally renders MobilePhotoEditor component for screens < 1024px or DesktopPhotoEditor component for screens >= 1024px, both using shared photoEditorStore for state management, includes ThreeBackground component, and includes NavbarDesktop for desktop/MobileBottomNav for mobile",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-start-building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Uses useMediaQuery('(min-width: 1024px)') to detect screen width",
+        "Renders MobilePhotoEditor for screens < 1024px",
+        "Renders DesktopPhotoEditor for screens >= 1024px",
+        "Both layouts share photoEditorStore",
+        "Includes ThreeBackground component",
+        "Shows NavbarDesktop on desktop, MobileBottomNav on mobile"
+      ]
+    },
+    {
+      "id": "REQ-241",
+      "text": "Update Router.tsx to ensure /editor/video route points to VideoEditor component (responsive, not separate mobile/desktop routes) and /editor/photo route points to PhotoEditor component (responsive), both routes wrapped with PageTransition component for consistent 3D navigation effects, preserving all existing AI tool routes (/ai/*) and home page route (/)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-start-building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "/editor/video route points to responsive VideoEditor component",
+        "/editor/photo route points to responsive PhotoEditor component",
+        "Both routes wrapped with PageTransition component",
+        "All existing AI tool routes (/ai/*) preserved",
+        "Home page route (/) preserved",
+        "No separate mobile/desktop routes created"
+      ]
+    },
+    {
+      "id": "REQ-242",
+      "text": "Update Home page component in frontend/src/pages/Home.tsx to update Photo Edit card navigation from placeholder to /editor/photo route using router.navigate or Link component, keeping all other elements (ThreeBackground, SearchBar, RecentProjects, Create section with Video Edit and Auto Cut cards, AI Tools section, Templates section, NavbarDesktop, MobileBottomNav) exactly as they currently are with no changes to styling, layout, or functionality",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-start-building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Photo Edit card navigates to /editor/photo route",
+        "All other elements remain unchanged",
+        "ThreeBackground, SearchBar, RecentProjects preserved",
+        "Create section (Video Edit, Photo Edit, Auto Cut) preserved",
+        "AI Tools section preserved",
+        "Templates section preserved",
+        "NavbarDesktop and MobileBottomNav preserved",
+        "No styling, layout, or functionality changes to existing elements"
+      ]
+    },
+    {
+      "id": "REQ-243",
+      "text": "Ensure all glassmorphism panels across MobileVideoEditor, DesktopVideoEditor, MobilePhotoEditor, and DesktopPhotoEditor use consistent styling: bg-white/10 background color with 10% opacity, backdrop-blur-xl for blur effect, rounded-xl border radius (12px), border border-white/20 for subtle edge definition, appropriate padding (p-4 or p-6), and white text (text-white) with text shadows (shadow-lg) for contrast on glassmorphism backgrounds",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-start-building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All glassmorphism panels use bg-white/10",
+        "backdrop-blur-xl applied for blur effect",
+        "rounded-xl border radius (12px)",
+        "border border-white/20 for subtle edges",
+        "Appropriate padding (p-4 or p-6)",
+        "White text (text-white) with shadow-lg",
+        "Consistent styling across all 4 editor components",
+        "High text visibility on glassmorphism backgrounds"
       ]
     }
   ],
   "constraints": [
-    "Backend must use single-actor architecture with all logic in main.mo",
-    "Migration.mo only required when upgrading existing state",
-    "Frontend immutable paths (useInternetIdentity, useActor, main.tsx, components/ui) must not be edited",
-    "All AI integrations must include both mock implementations and API integration points",
-    "Mock data must be realistic and match expected API response formats",
-    "All job types must use the expanded AIJob discriminated union type system"
+    "Do not modify backend/main.mo AIJobManager actor - it already has full job processing, caching, scheduling, device profiles, and fallback systems implemented",
+    "Do not modify existing AI tool pages in frontend/src/pages/ai/* - all 43 AI tool pages are already implemented",
+    "Do not modify existing engine files (CoreEngine, TimelineEngine, KeyframeEngine, EffectEngine, ExportEngine) - they are complete",
+    "Do not modify existing components: AIAssistant, AIJobStatus, AIToolCard, HomeOptionCard, TemplateCard, ThreeBackground, NavbarDesktop, MobileBottomNav",
+    "Do not modify existing stores: editorStore.ts is complete with tracks, clips, keyframes, and project management",
+    "Do not modify existing hooks: useAIJob.ts, useProjectManager.ts, useInternetIdentity.ts, useActor.ts are complete",
+    "Do not modify existing services: aiService.ts has all 50+ mock AI functions and API integration points",
+    "Do not modify existing type definitions: aiJob.ts and aiTypes.ts have complete type system for all 50+ AI operations",
+    "Preserve existing Timeline, Inspector, Toolbar, Preview, ExportModal, ProjectsModal components - only update Preview for isMobile prop",
+    "Do not change existing routes for AI tools, Home page, or ComingSoon pages",
+    "Maintain existing glassmorphism design system with dark theme (bg-black) and consistent styling",
+    "Preserve existing 3D page transitions using PageTransition component with Framer Motion",
+    "Do not modify existing data files: homeSections.ts, templates.ts, aiKnowledgeBase.ts are complete"
   ],
   "nonGoals": [
-    "Implementing actual external AI API calls (only integration points and mocks)",
-    "Real-time WebSocket connections for job updates",
-    "User authentication beyond existing Internet Identity",
-    "Payment processing for premium tiers",
-    "Database migration tools or CLI utilities",
-    "Mobile native app versions",
-    "Server-side rendering or SSR optimization"
+    "Implementing new AI tools beyond the existing 50+",
+    "Adding new backend functionality to AIJobManager actor",
+    "Creating new state management beyond photoEditorStore",
+    "Implementing video/photo export functionality (already exists in ExportEngine)",
+    "Adding new animation effects or shaders",
+    "Implementing user authentication changes",
+    "Adding new project management features",
+    "Creating new template systems",
+    "Modifying existing AI service provider integrations",
+    "Adding new routes beyond /editor/video and /editor/photo",
+    "Changing existing home page layout or sections",
+    "Implementing real external API calls (mock functions already in place)",
+    "Adding new component libraries or dependencies beyond existing stack"
   ],
   "imageRequirements": {
     "required": [],

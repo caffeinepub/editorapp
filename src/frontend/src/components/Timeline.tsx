@@ -61,9 +61,9 @@ export default function Timeline() {
     <div className="h-full bg-gray-900/50 backdrop-blur-sm flex flex-col">
       {/* Timeline Header */}
       <div className="h-10 border-b border-white/10 flex items-center px-4 bg-gray-900/80">
-        <span className="text-sm font-medium text-teal-400">Timeline</span>
+        <span className="text-sm font-medium text-teal-400 shadow-lg">Timeline</span>
         <div className="flex-1" />
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs text-white/80 font-medium shadow-lg bg-gray-900/80 px-2 py-1 rounded">
           {time.toFixed(2)}s / {duration}s
         </span>
       </div>
@@ -77,7 +77,7 @@ export default function Timeline() {
         >
           {/* Time Ruler */}
           <div className="sticky top-0 z-10 h-8 bg-gray-900/90 backdrop-blur-sm border-b border-white/10 flex">
-            <div className="w-[80px] border-r border-white/10 flex items-center justify-center text-xs text-muted-foreground">
+            <div className="w-[80px] border-r border-white/10 flex items-center justify-center text-xs text-white/80 font-medium shadow-lg">
               Tracks
             </div>
             <div className="flex-1 relative">
@@ -87,7 +87,7 @@ export default function Timeline() {
                   className="absolute top-0 h-full border-l border-white/20"
                   style={{ left: `${i * pixelsPerSecond}px` }}
                 >
-                  <span className="text-xs text-muted-foreground ml-1">{i}s</span>
+                  <span className="text-xs text-white/80 font-medium ml-1 shadow-lg bg-gray-900/60 px-1 rounded">{i}s</span>
                 </div>
               ))}
             </div>
@@ -100,7 +100,7 @@ export default function Timeline() {
               {tracks.map((track, idx) => (
                 <div
                   key={track.id}
-                  className="h-[60px] border-b border-white/5 flex items-center justify-center text-xs text-muted-foreground bg-gray-900/30"
+                  className="h-[60px] border-b border-white/5 flex items-center justify-center text-xs text-white/80 font-medium shadow-lg bg-gray-900/30"
                   style={{ 
                     backgroundColor: idx % 2 === 0 ? 'rgba(20, 184, 166, 0.05)' : 'rgba(0, 0, 0, 0.2)' 
                   }}
@@ -109,7 +109,7 @@ export default function Timeline() {
                 </div>
               ))}
               {tracks.length === 0 && (
-                <div className="h-[60px] border-b border-white/5 flex items-center justify-center text-xs text-muted-foreground">
+                <div className="h-[60px] border-b border-white/5 flex items-center justify-center text-xs text-white/60 shadow-lg">
                   No tracks
                 </div>
               )}
@@ -137,8 +137,8 @@ export default function Timeline() {
                     key={clip.id}
                     className={`absolute h-12 rounded cursor-move flex items-center px-2 text-xs font-medium transition-all ${
                       selectedClipId === clip.id 
-                        ? 'bg-teal-500 text-white ring-2 ring-teal-400' 
-                        : 'bg-teal-600/80 text-white hover:bg-teal-500/90'
+                        ? 'bg-teal-500 text-white ring-2 ring-teal-400 shadow-lg' 
+                        : 'bg-teal-600/80 text-white hover:bg-teal-500/90 shadow-lg'
                     }`}
                     style={{
                       left: `${clip.start * pixelsPerSecond}px`,
@@ -147,7 +147,7 @@ export default function Timeline() {
                     }}
                     onMouseDown={(e) => handleClipMouseDown(e, clip.id)}
                   >
-                    <span className="truncate flex-1">
+                    <span className="truncate flex-1 shadow-lg">
                       {clip.type || 'Clip'} {clip.id.slice(-4)}
                     </span>
                     <Button
@@ -167,10 +167,10 @@ export default function Timeline() {
 
               {/* Playhead */}
               <div
-                className="absolute top-0 bottom-0 w-0.5 bg-amber-500 pointer-events-none z-20"
+                className="absolute top-0 bottom-0 w-0.5 bg-amber-500 pointer-events-none z-20 shadow-lg"
                 style={{ left: `${time * pixelsPerSecond}px` }}
               >
-                <div className="absolute -top-2 -left-1.5 w-3 h-3 bg-amber-500 rounded-full" />
+                <div className="absolute -top-2 -left-1.5 w-3 h-3 bg-amber-500 rounded-full shadow-lg" />
               </div>
             </div>
           </div>
