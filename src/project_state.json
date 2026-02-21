@@ -1,0 +1,2121 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 19,
+  "summary": "Professional video editor with unified architecture featuring timeline engine, keyframe animations (Alight Motion style), WebGL GPU rendering, shader-based effects (After Effects style), multi-format export (video/GIF/image sequences), and Motoko backend for project persistence. Home page redesigned with CapCut-inspired layout: search bar with filters, Recent Projects horizontal carousel, Create section (Video Edit/Photo Edit/Auto Cut), AI Tools wizard-based interfaces, and Templates section with animated 3D preview cards. Features glassmorphism UI, Framer Motion animations, global 3D page transitions, Three.js background, and mobile-responsive design. Comprehensive AI orchestration layer with expanded feature set across 8 AI categories: Generation AI (text→image/video, voice cloning with ElevenLabs, music generation, B-roll, logos, stickers, character consistency, face-aware generation), Editing AI (highlight detection, timeline intelligence with AI-suggested cuts/effects/zooms, motion AI with auto keyframes/easing/camera shake/parallax), Enhancement AI (HDR enhancement, skin tone correction, flicker removal, face restoration, old video restoration), Creator AI (word-level subtitle animation with emoji insertion, template system with auto-apply, brand kit integration, object/face tracking, AI glow/blur effects, green screen removal), Assistant AI (enhanced context-aware chat with command interface), Growth AI (title/hook/caption generators, hashtag AI, best posting time recommendations, virality prediction with hook analysis/retention/scroll-stop scores, A/B caption testing), Experimental AI (actor replacement, AI avatar presenter, eye contact correction, AI hand gestures, script→edited video, AI camera framing), and System AI (AI caching, smart job scheduling, device-aware quality optimization, lag prediction & avoidance). All features implemented with complete UI/UX workflows, full job submission flows ready to plug into AI APIs (Replicate, ElevenLabs, Runway), and actual Motoko backend logic with performance optimizations. Features unified AIJob type system, Motoko backend job manager with persistent queue and optimization logic, dual AI integration (mock + API integration points), and seamless video editor integration.",
+  "architectural_notes": [
+    "Single unified architecture with one core state connecting all engines",
+    "Zustand store managing time, clips, layers, keyframes, and effects",
+    "Separate engines: Timeline, Keyframe, Effect, Render (WebGL), and Export",
+    "Component structure: UI layer (React) → Engine layer → Store layer",
+    "Keyframe interpolation for smooth property animations (x, y, scale, rotation)",
+    "WebGL-based GPU rendering for real-time preview performance",
+    "Shader-based effects system for extensible post-processing",
+    "Motoko backend actor for persistent project storage on ICP",
+    "Multi-format export pipeline (video, GIF, image sequence)",
+    "Modular folder structure: ui/, engine/, store/, shaders/"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-implement-core-editor-state-management-using-zustand-with-types-for-keyframe-time-value-clip-id-start-duration-layer-transform-with-x-y-scale-rotation-keyframe-arrays-effects-array-and-store-methods-for-addclip-settime-playing-state-and-clips-array",
+      "title": "Implement core editor state management using Zustand with types for Keyframe (time, value), Clip (id, start, duration, layer, transform with x/y/scale/rotation keyframe arrays, effects array), and store methods for addClip, setTime, playing state, and clips array",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-timelineengine-class-that-accepts-clips-array-in-constructor-and-provides-getactiveclips-method-to-filter-clips-active-at-a-given-time-where-time-clip-start-and-time-clip-start-clip-duration",
+      "title": "Create TimelineEngine class that accepts clips array in constructor and provides getActiveClips method to filter clips active at a given time (where time >= clip.start AND time <= clip.start + clip.duration)",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-keyframeengine-with-interpolate-function-that-takes-keyframe-array-and-time-finds-prev-next-keyframes-around-current-time-and-returns-linearly-interpolated-value-using-formula-prev-value-t-next-value-prev-value-where-t-time-prev-time-next-time-prev-time",
+      "title": "Implement KeyframeEngine with interpolate function that takes keyframe array and time, finds prev/next keyframes around current time, and returns linearly interpolated value using formula: prev.value + t * (next.value - prev.value) where t = (time - prev.time) / (next.time - prev.time)",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-effectengine-class-with-effect-type-name-string-uniforms-record-string-number-and-add-method-to-register-effects-in-effects-array",
+      "title": "Create EffectEngine class with Effect type (name string, uniforms Record<string, number>) and add method to register effects in effects array",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-coreengine-class-with-renderclip-method-that-takes-clip-and-time-uses-interpolate-function-to-calculate-x-y-scale-rotation-values-from-clip-transform-keyframes-at-current-time-and-returns-transform-object-with-interpolated-values",
+      "title": "Implement CoreEngine class with renderClip method that takes clip and time, uses interpolate function to calculate x/y/scale/rotation values from clip transform keyframes at current time, and returns transform object with interpolated values",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-exportengine-module-with-exportproject-async-function-that-accepts-project-data-and-logs-export-initiation-with-placeholder-for-frame-by-frame-rendering",
+      "title": "Create ExportEngine module with exportProject async function that accepts project data and logs export initiation with placeholder for frame-by-frame rendering",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-main-app-component-with-editor-layout-containing-toolbar-preview-inspector-and-timeline-components-arranged-in-professional-video-editor-layout-using-tailwind-css-with-dark-theme",
+      "title": "Build main App component with editor layout containing Toolbar, Preview, Inspector, and Timeline components arranged in professional video editor layout using Tailwind CSS with dark theme",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-toolbar-component-with-controls-for-play-pause-add-media-add-text-add-shape-effects-and-export-buttons-connected-to-editor-store",
+      "title": "Create Toolbar component with controls for play/pause, add media, add text, add shape, effects, and export buttons connected to editor store",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-timeline-component-displaying-clips-on-layers-with-horizontal-time-axis-showing-clip-start-duration-as-positioned-bars-supporting-drag-to-reposition-clips-and-connected-to-editor-store-for-time-scrubbing",
+      "title": "Implement Timeline component displaying clips on layers with horizontal time axis, showing clip start/duration as positioned bars, supporting drag to reposition clips, and connected to editor store for time scrubbing",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-preview-component-with-webgl-canvas-rendering-active-clips-using-coreengine-renderclip-at-current-time-applying-transforms-position-scale-rotation-with-three-js-and-react-three-fiber-for-gpu-accelerated-rendering-of-all-media-types",
+      "title": "Build Preview component with WebGL canvas rendering active clips using CoreEngine renderClip at current time, applying transforms (position, scale, rotation) with Three.js and React Three Fiber for GPU-accelerated rendering of all media types",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-inspector-component-displaying-properties-for-selected-clip-including-transform-keyframes-x-y-scale-rotation-with-ability-to-add-edit-delete-keyframes-at-current-time-effects-list-and-clip-timing-controls",
+      "title": "Create Inspector component displaying properties for selected clip including transform keyframes (x, y, scale, rotation) with ability to add/edit/delete keyframes at current time, effects list, and clip timing controls",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-media-upload-functionality-allowing-users-to-upload-image-and-video-files-store-them-as-clips-with-default-transform-keyframes-x-0-y-0-scale-1-rotation-0-at-time-0-and-add-to-timeline",
+      "title": "Implement media upload functionality allowing users to upload image and video files, store them as clips with default transform keyframes (x=0, y=0, scale=1, rotation=0 at time 0), and add to timeline",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-text-layer-creation-functionality-that-generates-text-clips-with-customizable-content-font-size-color-and-standard-transform-keyframes",
+      "title": "Add text layer creation functionality that generates text clips with customizable content, font, size, color, and standard transform keyframes",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-shape-creation-functionality-supporting-basic-shapes-rectangle-circle-triangle-with-fill-color-stroke-and-transform-keyframes",
+      "title": "Add shape creation functionality supporting basic shapes (rectangle, circle, triangle) with fill color, stroke, and transform keyframes",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-connect-frontend-to-motoko-backend-with-save-project-functionality-that-serializes-editor-state-clips-timeline-data-to-json-and-calls-backend-save-function-and-load-project-functionality-that-calls-backend-load-and-restores-editor-state",
+      "title": "Connect frontend to Motoko backend with save project functionality that serializes editor state (clips, timeline data) to JSON and calls backend save function, and load project functionality that calls backend load and restores editor state",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-basic-shader-support-by-creating-a-simple-glsl-shader-file-and-integrating-with-effectengine-to-apply-shader-effects-to-clips-in-webgl-preview",
+      "title": "Implement basic shader support by creating a simple GLSL shader file and integrating with EffectEngine to apply shader effects to clips in WebGL preview",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-export-functionality-with-options-to-export-project-as-video-file-animated-gif-image-sequence-png-frames-or-json-project-data-for-later-editing",
+      "title": "Implement export functionality with options to export project as video file, animated GIF, image sequence (PNG frames), or JSON project data for later editing",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-design-a-cinematic-dark-theme-with-vibrant-teal-and-amber-accent-colors-using-sophisticated-gradients-and-glass-morphism-effects-to-create-a-premium-professional-video-editing-interface-that-feels-modern-and-polished",
+      "title": "Design a cinematic dark theme with vibrant teal and amber accent colors, using sophisticated gradients and glass-morphism effects to create a premium, professional video editing interface that feels modern and polished",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-editorstate-type-in-editorstore-ts-to-include-fps-number-and-resolution-number-number-fields-alongside-existing-time-and-clips-properties",
+      "title": "Update EditorState type in editorStore.ts to include fps (number) and resolution ([number, number]) fields alongside existing time and clips properties",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-restructure-editorstore-to-use-track-type-with-id-and-clips-array-replacing-the-current-flat-clips-array-with-tracks-array",
+      "title": "Restructure editorStore to use Track type with id and clips array, replacing the current flat clips array with tracks array",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-opacity-keyframe-array-to-clip-transform-type-in-editorstore-ts-alongside-existing-x-y-scale-rotation-keyframe-arrays",
+      "title": "Add opacity keyframe array to Clip transform type in editorStore.ts alongside existing x, y, scale, rotation keyframe arrays",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-coreengine-renderclip-method-to-calculate-and-return-opacity-value-by-interpolating-opacity-keyframes-at-current-time",
+      "title": "Update CoreEngine renderClip method to calculate and return opacity value by interpolating opacity keyframes at current time",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-preview-component-to-apply-opacity-transform-when-rendering-clips-using-three-js-material-opacity-property",
+      "title": "Update Preview component to apply opacity transform when rendering clips using Three.js material opacity property",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-opacity-keyframe-controls-to-inspector-component-allowing-users-to-add-edit-and-delete-opacity-keyframes-at-current-time",
+      "title": "Add opacity keyframe controls to Inspector component allowing users to add, edit, and delete opacity keyframes at current time",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-timeline-component-to-work-with-tracks-array-structure-displaying-each-track-as-a-separate-layer-with-its-clips",
+      "title": "Update Timeline component to work with tracks array structure, displaying each track as a separate layer with its clips",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-timelineengine-getactiveclips-method-to-accept-tracks-array-instead-of-clips-array-and-return-active-clips-from-all-tracks",
+      "title": "Update TimelineEngine getActiveClips method to accept tracks array instead of clips array and return active clips from all tracks",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-applyeffects-function-in-effectengine-that-accepts-imagedata-and-effectinstance-array-and-applies-effects-sequentially-with-support-for-blur-and-color-effects",
+      "title": "Create applyEffects function in EffectEngine that accepts ImageData and EffectInstance array and applies effects sequentially with support for blur and color effects",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-renderframe-function-in-coreengine-or-create-new-renderengine-module-that-orchestrates-timeline-keyframe-and-effect-engines-to-render-complete-frames",
+      "title": "Update renderFrame function in CoreEngine or create new RenderEngine module that orchestrates Timeline, Keyframe, and Effect engines to render complete frames",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-exportengine-exportproject-to-implement-frame-by-frame-rendering-loop-using-state-fps-to-calculate-frame-times-and-calling-renderframe-for-each-frame",
+      "title": "Update ExportEngine exportProject to implement frame-by-frame rendering loop using state.fps to calculate frame times and calling renderFrame for each frame",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-fps-and-resolution-controls-to-toolbar-component-allowing-users-to-configure-project-settings-30-60-fps-720p-1080p-4k-presets",
+      "title": "Add fps and resolution controls to Toolbar component allowing users to configure project settings (30/60 fps, 720p/1080p/4K presets)",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-exportmodal-to-include-resolution-and-fps-settings-in-export-options-displaying-current-project-resolution-and-fps-values",
+      "title": "Update ExportModal to include resolution and fps settings in export options, displaying current project resolution and fps values",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-homesections-ts-data-file-in-frontend-src-data-directory-containing-structured-navigation-data-for-7-main-sections-create-ai-tools-templates-quick-tools-assets-projects-account-with-each-section-having-title-and-items-array-containing-name-and-route-properties",
+      "title": "Create homeSections.ts data file in frontend/src/data directory containing structured navigation data for 7 main sections (Create, AI Tools, Templates, Quick Tools, Assets, Projects, Account) with each section having title and items array containing name and route properties",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-homeoptioncard-component-in-frontend-src-components-directory-that-renders-a-glassmorphism-card-with-framer-motion-animations-including-whilehover-effects-y-10-rotatex-6-rotatey-6-whiletap-scale-effect-0-95-css-3d-transforms-with-preserve-3d-rounded-2xl-shape-bg-white-10-with-backdrop-blur-xl-shadow-2xl-and-click-navigation-using-usenavigate",
+      "title": "Create HomeOptionCard component in frontend/src/components directory that renders a glassmorphism card with Framer Motion animations including whileHover effects (y: -10, rotateX: 6, rotateY: -6), whileTap scale effect (0.95), CSS 3D transforms with preserve-3d, rounded-2xl shape, bg-white/10 with backdrop-blur-xl, shadow-2xl, and click navigation using useNavigate",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-home-page-component-in-frontend-src-pages-directory-that-imports-homesections-data-and-renders-sections-in-vertical-layout-with-section-titles-text-2xl-font-bold-grid-layout-for-cards-grid-cols-4-gap-6-on-desktop-grid-cols-2-gap-4-on-mobile-dark-background-bg-black-white-text-and-proper-spacing-p-10-space-y-12",
+      "title": "Create Home page component in frontend/src/pages directory that imports homeSections data and renders sections in vertical layout with section titles (text-2xl font-bold), grid layout for cards (grid-cols-4 gap-6 on desktop, grid-cols-2 gap-4 on mobile), dark background (bg-black), white text, and proper spacing (p-10 space-y-12)",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-threebackground-component-in-frontend-src-components-directory-that-renders-an-animated-3d-background-scene-using-react-three-fiber-with-gpu-accelerated-particles-or-geometric-shapes-positioned-as-fixed-full-screen-background-fixed-inset-0-z-10-and-includes-ambient-lighting-and-animation-loop-using-useframe-hook",
+      "title": "Create ThreeBackground component in frontend/src/components directory that renders an animated 3D background scene using React Three Fiber with GPU-accelerated particles or geometric shapes, positioned as fixed full-screen background (fixed inset-0 -z-10), and includes ambient lighting and animation loop using useFrame hook",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-home-page-component-to-include-threebackground-component-as-fixed-background-layer-behind-all-content-sections",
+      "title": "Update Home page component to include ThreeBackground component as fixed background layer behind all content sections",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-mobile-bottom-navigation-component-in-frontend-src-components-directory-with-fixed-positioning-fixed-bottom-0-w-full-dark-background-bg-black-90-flex-layout-with-space-around-alignment-and-navigation-buttons-for-create-templates-ai-projects-sections",
+      "title": "Create mobile bottom navigation component in frontend/src/components directory with fixed positioning (fixed bottom-0 w-full), dark background (bg-black/90), flex layout with space-around alignment, and navigation buttons for Create, Templates, AI, Projects sections",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-home-page-component-to-include-mobile-bottom-navigation-bar-that-appears-only-on-mobile-breakpoints-using-tailwind-responsive-classes",
+      "title": "Update Home page component to include mobile bottom navigation bar that appears only on mobile breakpoints using Tailwind responsive classes",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-placeholder-coming-soon-page-component-in-frontend-src-pages-directory-for-ai-tools-features-with-centered-layout-dark-background-glassmorphism-card-displaying-coming-soon-message-feature-name-and-back-button-to-home",
+      "title": "Create placeholder Coming Soon page component in frontend/src/pages directory for AI Tools features with centered layout, dark background, glassmorphism card displaying 'Coming Soon' message, feature name, and back button to home",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-react-router-routes-in-main-app-component-for-all-home-page-navigation-paths-including-editor-video-route-to-existing-app-component-video-editor-placeholder-routes-for-ai-tools-ai-auto-cut-ai-captions-ai-tts-ai-speech-to-text-ai-bg-remove-ai-smart-crop-ai-beat-sync-ai-resize-pointing-to-coming-soon-component-and-placeholder-routes-for-other-sections-templates-quick-tools-assets-projects-account",
+      "title": "Add React Router routes in main App component for all home page navigation paths including /editor/video route to existing App component (video editor), placeholder routes for AI Tools (/ai/auto-cut, /ai/captions, /ai/tts, /ai/speech-to-text, /ai/bg-remove, /ai/smart-crop, /ai/beat-sync, /ai/resize) pointing to Coming Soon component, and placeholder routes for other sections (Templates, Quick Tools, Assets, Projects, Account)",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-homeoptioncard-component-styling-to-include-soft-neon-edges-using-box-shadow-with-cyan-teal-glow-effect-increase-depth-shadow-intensity-and-add-subtle-gradient-overlay-for-premium-appearance",
+      "title": "Update HomeOptionCard component styling to include soft neon edges using box-shadow with cyan/teal glow effect, increase depth shadow intensity, and add subtle gradient overlay for premium appearance",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-restructure-router-tsx-to-make-home-page-the-root-route-and-move-existing-video-editor-to-editor-video-route-preserving-all-existing-ai-tools-templates-and-other-placeholder-routes",
+      "title": "Restructure Router.tsx to make Home page the root route ('/') and move existing video editor to '/editor/video' route, preserving all existing AI Tools, Templates, and other placeholder routes",
+      "reqIds": [
+        "REQ-46"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-searchbar-component-in-frontend-src-components-directory-with-glassmorphism-styling-bg-white-10-backdrop-blur-xl-rounded-xl-shape-search-input-placeholder-search-templates-tools-ai-and-filter-button-matching-capcut-design-aesthetic",
+      "title": "Create SearchBar component in frontend/src/components directory with glassmorphism styling (bg-white/10 backdrop-blur-xl), rounded-xl shape, search input placeholder 'Search templates, tools, AI…', and filter button, matching CapCut design aesthetic",
+      "reqIds": [
+        "REQ-48"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-recentprojects-component-in-frontend-src-components-directory-displaying-a-horizontal-scrolling-carousel-with-glassmorphism-cards-min-w-200px-h-32-bg-white-10-rounded-xl-backdrop-blur-xl-using-flex-layout-with-space-x-4-and-overflow-x-auto-for-horizontal-scrolling",
+      "title": "Build RecentProjects component in frontend/src/components directory displaying a horizontal scrolling carousel with glassmorphism cards (min-w-[200px] h-32 bg-white/10 rounded-xl backdrop-blur-xl), using flex layout with space-x-4 and overflow-x-auto for horizontal scrolling",
+      "reqIds": [
+        "REQ-49"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-templatecard-component-in-frontend-src-components-directory-with-framer-motion-whilehover-animation-scale-1-05-rotatey-8-whiletap-scale-0-95-preserve-3d-transform-style-h-48-rounded-2xl-shape-gradient-background-from-purple-600-to-blue-600-and-bottom-overlay-with-title-display",
+      "title": "Create TemplateCard component in frontend/src/components directory with Framer Motion whileHover animation (scale: 1.05, rotateY: 8), whileTap scale: 0.95, preserve-3d transform style, h-48 rounded-2xl shape, gradient background from-purple-600 to-blue-600, and bottom overlay with title display",
+      "reqIds": [
+        "REQ-50"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-autocutwizard-page-component-in-frontend-src-pages-ai-directory-with-multi-step-wizard-ui-pattern-using-step-state-management-displaying-upload-your-video-at-step-1-select-style-at-step-2-processing-at-step-3-with-next-button-to-advance-steps",
+      "title": "Implement AutoCutWizard page component in frontend/src/pages/ai directory with multi-step wizard UI pattern using step state management, displaying 'Upload your video' at step 1, 'Select style' at step 2, 'Processing…' at step 3, with Next button to advance steps",
+      "reqIds": [
+        "REQ-51"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-captionswizard-page-component-in-frontend-src-pages-ai-directory-with-the-same-multi-step-wizard-ui-pattern-as-autocutwizard-adapted-for-captions-workflow-with-appropriate-step-messages",
+      "title": "Implement CaptionsWizard page component in frontend/src/pages/ai directory with the same multi-step wizard UI pattern as AutoCutWizard, adapted for captions workflow with appropriate step messages",
+      "reqIds": [
+        "REQ-52"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-backgroundremovewizard-page-component-in-frontend-src-pages-ai-directory-with-the-same-multi-step-wizard-ui-pattern-as-autocutwizard-adapted-for-background-removal-workflow",
+      "title": "Implement BackgroundRemoveWizard page component in frontend/src/pages/ai directory with the same multi-step wizard UI pattern as AutoCutWizard, adapted for background removal workflow",
+      "reqIds": [
+        "REQ-53"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-beatsyncwizard-page-component-in-frontend-src-pages-ai-directory-with-the-same-multi-step-wizard-ui-pattern-as-autocutwizard-adapted-for-beat-sync-workflow",
+      "title": "Implement BeatSyncWizard page component in frontend/src/pages/ai directory with the same multi-step wizard UI pattern as AutoCutWizard, adapted for beat sync workflow",
+      "reqIds": [
+        "REQ-54"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-pagetransition-wrapper-component-in-frontend-src-components-directory-using-framer-motion-with-initial-state-opacity-0-rotatex-5-animate-state-opacity-1-rotatex-0-exit-state-opacity-0-rotatex-5-0-5-second-transition-duration-and-preserve-3d-transform-style",
+      "title": "Create PageTransition wrapper component in frontend/src/components directory using Framer Motion with initial state (opacity: 0, rotateX: -5), animate state (opacity: 1, rotateX: 0), exit state (opacity: 0, rotateX: 5), 0.5 second transition duration, and preserve-3d transform style",
+      "reqIds": [
+        "REQ-55"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-router-tsx-to-wrap-all-page-components-with-pagetransition-component-for-consistent-3d-navigation-effects-including-home-videoeditor-ai-wizard-pages-and-comingsoon-pages",
+      "title": "Update Router.tsx to wrap all page components with PageTransition component for consistent 3D navigation effects, including Home, VideoEditor, AI wizard pages, and ComingSoon pages",
+      "reqIds": [
+        "REQ-56"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-routes-to-router-tsx-for-ai-wizard-pages-ai-auto-cut-pointing-to-autocutwizard-ai-captions-pointing-to-captionswizard-ai-bg-remove-pointing-to-backgroundremovewizard-and-ai-beat-sync-pointing-to-beatsyncwizard-replacing-comingsoon-placeholders-for-these-routes",
+      "title": "Add routes to Router.tsx for AI wizard pages: /ai/auto-cut pointing to AutoCutWizard, /ai/captions pointing to CaptionsWizard, /ai/bg-remove pointing to BackgroundRemoveWizard, and /ai/beat-sync pointing to BeatSyncWizard, replacing ComingSoon placeholders for these routes",
+      "reqIds": [
+        "REQ-57"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-completely-restructure-home-page-frontend-src-pages-home-tsx-with-new-layout-containing-searchbar-at-top-recent-projects-section-with-heading-and-recentprojects-carousel-create-section-with-heading-and-grid-of-cards-for-video-edit-editor-video-photo-edit-and-auto-cut-ai-auto-cut-ai-tools-section-with-heading-and-templates-section-with-heading-and-grid-of-templatecard-components-displaying-placeholder-templates-trending-reel-beat-sync-business-ad-gaming-edit-all-using-p-10-spacing-and-space-y-10-vertical-spacing-white-text-and-dark-background",
+      "title": "Completely restructure Home page (frontend/src/pages/Home.tsx) with new layout containing: SearchBar at top, Recent Projects section with heading and RecentProjects carousel, Create section with heading and grid of cards for Video Edit (/editor/video), Photo Edit, and Auto Cut (/ai/auto-cut), AI Tools section with heading, and Templates section with heading and grid of TemplateCard components displaying placeholder templates (Trending Reel, Beat Sync, Business Ad, Gaming Edit), all using p-10 spacing and space-y-10 vertical spacing, white text, and dark background",
+      "reqIds": [
+        "REQ-58"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-home-page-to-use-responsive-grid-layouts-grid-cols-4-gap-6-for-desktop-and-grid-cols-2-gap-4-for-mobile-breakpoints-applying-to-both-create-section-and-templates-section-grids",
+      "title": "Update Home page to use responsive grid layouts: grid-cols-4 gap-6 for desktop and grid-cols-2 gap-4 for mobile breakpoints, applying to both Create section and Templates section grids",
+      "reqIds": [
+        "REQ-59"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-navbardesktop-component-in-frontend-src-components-directory-with-sidebar-layout-dark-glassmorphism-background-bg-black-90-backdrop-blur-xl-vertical-navigation-items-for-create-templates-ai-tools-projects-sections-logo-at-top-and-sticky-positioning",
+      "title": "Create NavbarDesktop component in frontend/src/components directory with sidebar layout, dark glassmorphism background (bg-black/90 backdrop-blur-xl), vertical navigation items for Create, Templates, AI Tools, Projects sections, logo at top, and sticky positioning",
+      "reqIds": [
+        "REQ-60"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-mobilebottomnav-component-in-frontend-src-components-mobilebottomnav-tsx-to-include-all-four-main-navigation-tabs-create-templates-ai-projects-with-icons-active-state-styling-and-tanstack-router-navigation",
+      "title": "Update MobileBottomNav component in frontend/src/components/MobileBottomNav.tsx to include all four main navigation tabs (Create, Templates, AI, Projects) with icons, active state styling, and TanStack router navigation",
+      "reqIds": [
+        "REQ-61"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-threebackground-component-in-frontend-src-components-threebackground-tsx-to-render-a-full-3d-animated-scene-with-particle-system-rotating-geometric-shapes-torus-octahedron-box-ambient-and-directional-lighting-camera-positioned-at-z-8-and-continuous-animation-using-useframe-hook",
+      "title": "Update ThreeBackground component in frontend/src/components/ThreeBackground.tsx to render a full 3D animated scene with particle system, rotating geometric shapes (torus, octahedron, box), ambient and directional lighting, camera positioned at z: 8, and continuous animation using useFrame hook",
+      "reqIds": [
+        "REQ-62"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-searchbar-component-in-frontend-src-components-searchbar-tsx-to-include-functional-search-state-management-filter-dropdown-with-options-all-templates-ai-tools-quick-tools-and-clear-button-when-search-text-is-present",
+      "title": "Update SearchBar component in frontend/src/components/SearchBar.tsx to include functional search state management, filter dropdown with options (All, Templates, AI Tools, Quick Tools), and clear button when search text is present",
+      "reqIds": [
+        "REQ-64"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-recentprojects-component-in-frontend-src-components-recentprojects-tsx-to-display-actual-project-data-from-editorstore-or-useprojectmanager-hook-showing-project-thumbnails-names-last-modified-timestamps-and-click-to-load-functionality",
+      "title": "Update RecentProjects component in frontend/src/components/RecentProjects.tsx to display actual project data from editorStore or useProjectManager hook, showing project thumbnails, names, last modified timestamps, and click-to-load functionality",
+      "reqIds": [
+        "REQ-65"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-templatecard-component-in-frontend-src-components-templatecard-tsx-to-support-template-metadata-name-category-duration-thumbnail-implement-animated-preview-on-hover-using-video-element-or-animated-thumbnail-and-add-use-template-button-overlay",
+      "title": "Update TemplateCard component in frontend/src/components/TemplateCard.tsx to support template metadata (name, category, duration, thumbnail), implement animated preview on hover using video element or animated thumbnail, and add 'Use Template' button overlay",
+      "reqIds": [
+        "REQ-66"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-autocutwizard-component-in-frontend-src-pages-ai-autocutwizard-tsx-to-include-file-upload-ui-at-step-1-with-drag-and-drop-support-style-selection-grid-with-visual-previews-at-step-2-dynamic-smooth-energetic-minimal-and-processing-animation-with-progress-indicator-at-step-3",
+      "title": "Update AutoCutWizard component in frontend/src/pages/ai/AutoCutWizard.tsx to include file upload UI at step 1 with drag-and-drop support, style selection grid with visual previews at step 2 (Dynamic, Smooth, Energetic, Minimal), and processing animation with progress indicator at step 3",
+      "reqIds": [
+        "REQ-67"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-captionswizard-component-in-frontend-src-pages-ai-captionswizard-tsx-to-include-video-upload-ui-at-step-1-language-and-style-configuration-language-dropdown-font-selection-position-options-at-step-2-and-caption-generation-with-preview-at-step-3",
+      "title": "Update CaptionsWizard component in frontend/src/pages/ai/CaptionsWizard.tsx to include video upload UI at step 1, language and style configuration (language dropdown, font selection, position options) at step 2, and caption generation with preview at step 3",
+      "reqIds": [
+        "REQ-68"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-backgroundremovewizard-component-in-frontend-src-pages-ai-backgroundremovewizard-tsx-to-include-video-upload-at-step-1-interactive-subject-selection-ui-with-brush-tools-at-step-2-and-processing-with-before-after-preview-at-step-3",
+      "title": "Update BackgroundRemoveWizard component in frontend/src/pages/ai/BackgroundRemoveWizard.tsx to include video upload at step 1, interactive subject selection UI with brush tools at step 2, and processing with before/after preview at step 3",
+      "reqIds": [
+        "REQ-69"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-beatsyncwizard-component-in-frontend-src-pages-ai-beatsyncwizard-tsx-to-include-video-and-audio-upload-at-step-1-bpm-detection-and-beat-visualization-at-step-2-and-sync-processing-with-preview-at-step-3",
+      "title": "Update BeatSyncWizard component in frontend/src/pages/ai/BeatSyncWizard.tsx to include video and audio upload at step 1, BPM detection and beat visualization at step 2, and sync processing with preview at step 3",
+      "reqIds": [
+        "REQ-70"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-pagetransition-component-in-frontend-src-components-pagetransition-tsx-using-framer-motion-animatepresence-with-initial-opacity-0-rotatex-5-animate-opacity-1-rotatex-0-exit-opacity-0-rotatex-5-0-5s-transition-duration-and-preserve-3d-transform-style",
+      "title": "Create PageTransition component in frontend/src/components/PageTransition.tsx using Framer Motion AnimatePresence with initial opacity: 0, rotateX: -5, animate opacity: 1, rotateX: 0, exit opacity: 0, rotateX: 5, 0.5s transition duration, and preserve-3d transform style",
+      "reqIds": [
+        "REQ-71"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-router-tsx-to-wrap-all-route-components-home-videoeditor-ai-wizards-comingsoon-with-pagetransition-component-for-consistent-3d-navigation-effects-throughout-the-application",
+      "title": "Update Router.tsx to wrap all route components (Home, VideoEditor, AI wizards, ComingSoon) with PageTransition component for consistent 3D navigation effects throughout the application",
+      "reqIds": [
+        "REQ-72"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-home-page-component-in-frontend-src-pages-home-tsx-to-include-threebackground-component-navbardesktop-desktop-only-mobilebottomnav-mobile-only-and-complete-layout-with-searchbar-recent-projects-section-create-section-video-edit-editor-video-photo-edit-auto-cut-ai-auto-cut-ai-tools-section-and-templates-section-with-responsive-grids-grid-cols-4-gap-6-desktop-grid-cols-2-gap-4-mobile",
+      "title": "Update Home page component in frontend/src/pages/Home.tsx to include ThreeBackground component, NavbarDesktop (desktop only), MobileBottomNav (mobile only), and complete layout with SearchBar, Recent Projects section, Create section (Video Edit /editor/video, Photo Edit, Auto Cut /ai/auto-cut), AI Tools section, and Templates section with responsive grids (grid-cols-4 gap-6 desktop, grid-cols-2 gap-4 mobile)",
+      "reqIds": [
+        "REQ-73"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-videoeditor-page-component-in-frontend-src-pages-videoeditor-tsx-to-include-threebackground-component-and-match-overall-design-system-with-glassmorphism-panels-and-dark-theme-consistency",
+      "title": "Update VideoEditor page component in frontend/src/pages/VideoEditor.tsx to include ThreeBackground component and match overall design system with glassmorphism panels and dark theme consistency",
+      "reqIds": [
+        "REQ-74"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-templates-data-file-in-frontend-src-data-templates-ts-containing-array-of-template-objects-with-id-name-category-thumbnail-duration-and-description-fields-for-placeholder-templates-trending-reel-beat-sync-business-ad-gaming-edit-vlog-intro-product-showcase",
+      "title": "Create templates data file in frontend/src/data/templates.ts containing array of template objects with id, name, category, thumbnail, duration, and description fields for placeholder templates (Trending Reel, Beat Sync, Business Ad, Gaming Edit, Vlog Intro, Product Showcase)",
+      "reqIds": [
+        "REQ-75"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-mobile-specific-performance-optimizations-to-threebackground-component-including-reduced-particle-count-on-mobile-simplified-geometry-lower-frame-rate-targets-and-conditional-detail-levels-based-on-window-innerwidth-check",
+      "title": "Add mobile-specific performance optimizations to ThreeBackground component including reduced particle count on mobile, simplified geometry, lower frame rate targets, and conditional detail levels based on window.innerWidth check",
+      "reqIds": [
+        "REQ-76"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-shared-aijob-type-system-in-frontend-src-types-aijob-ts-with-union-type-defining-7-ai-operations-image-generate-with-payload-prompt-string-size-string-video-generate-with-payload-prompt-string-duration-number-aspectratio-string-auto-cut-with-payload-videourl-string-style-string-removesilence-boolean-auto-subtitle-with-payload-videourl-string-language-string-style-string-enhance-with-payload-videourl-string-video-boolean-audio-boolean-upscale-with-payload-mediaurl-string-target-string-chat-help-with-payload-message-string-context-string",
+      "title": "Create shared AIJob type system in frontend/src/types/aiJob.ts with union type defining 7 AI operations: 'image.generate' with payload {prompt: string, size: string}, 'video.generate' with payload {prompt: string, duration: number, aspectRatio: string}, 'auto.cut' with payload {videoUrl: string, style: string, removeSilence: boolean}, 'auto.subtitle' with payload {videoUrl: string, language: string, style: string}, 'enhance' with payload {videoUrl: string, video: boolean, audio: boolean}, 'upscale' with payload {mediaUrl: string, target: string}, 'chat.help' with payload {message: string, context: string}",
+      "reqIds": [
+        "REQ-78"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-dual-ai-integration-service-in-frontend-src-services-aiservice-ts-with-mock-ai-functions-that-return-placeholder-data-for-immediate-functionality-mockgenerateimage-returning-data-url-mockgeneratevideo-returning-video-url-mockautocut-returning-cut-points-array-mockautosubtitle-returning-subtitle-array-with-timestamps-mockenhance-returning-processed-url-mockupscale-returning-upscaled-url-mockchathelp-returning-help-response-and-api-integration-points-structure-with-pluggable-provider-configuration-for-replicate-hugging-face-and-custom-endpoints",
+      "title": "Create dual AI integration service in frontend/src/services/aiService.ts with mock AI functions that return placeholder data for immediate functionality (mockGenerateImage returning data URL, mockGenerateVideo returning video URL, mockAutoCut returning cut points array, mockAutoSubtitle returning subtitle array with timestamps, mockEnhance returning processed URL, mockUpscale returning upscaled URL, mockChatHelp returning help response) and API integration points structure with pluggable provider configuration for Replicate, Hugging Face, and custom endpoints",
+      "reqIds": [
+        "REQ-80"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-useaijob-custom-hook-in-frontend-src-hooks-useaijob-ts-that-handles-job-submission-to-backend-using-react-query-mutations-implements-status-polling-with-configurable-interval-retrieves-job-results-when-completed-handles-error-states-with-retry-logic-and-provides-callbacks-for-automatic-asset-timeline-integration",
+      "title": "Create useAIJob custom hook in frontend/src/hooks/useAIJob.ts that handles job submission to backend using React Query mutations, implements status polling with configurable interval, retrieves job results when completed, handles error states with retry logic, and provides callbacks for automatic asset/timeline integration",
+      "reqIds": [
+        "REQ-81"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-imagegenerator-page-component-in-frontend-src-pages-ai-imagegenerator-tsx-with-glassmorphism-panel-prompt-textarea-with-placeholder-describe-the-image-you-want-to-create-size-selector-radio-buttons-1024x1024-512x512-256x256-style-dropdown-cinematic-photorealistic-illustration-abstract-generate-button-that-submits-image-generate-job-and-results-display-grid-showing-generated-images-with-download-and-add-to-assets-buttons",
+      "title": "Create ImageGenerator page component in frontend/src/pages/ai/ImageGenerator.tsx with glassmorphism panel, prompt textarea with placeholder 'Describe the image you want to create...', size selector radio buttons (1024x1024, 512x512, 256x256), style dropdown (Cinematic, Photorealistic, Illustration, Abstract), generate button that submits image.generate job, and results display grid showing generated images with download and add-to-assets buttons",
+      "reqIds": [
+        "REQ-82"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-videogenerator-page-component-in-frontend-src-pages-ai-videogenerator-tsx-with-glassmorphism-panel-prompt-textarea-with-placeholder-describe-the-video-you-want-to-create-duration-slider-3-10-seconds-with-value-display-aspect-ratio-selector-buttons-9-16-portrait-16-9-landscape-1-1-square-with-visual-icons-generate-button-that-submits-video-generate-job-and-results-display-showing-generated-video-with-preview-player-download-button-and-add-to-timeline-button",
+      "title": "Create VideoGenerator page component in frontend/src/pages/ai/VideoGenerator.tsx with glassmorphism panel, prompt textarea with placeholder 'Describe the video you want to create...', duration slider (3-10 seconds) with value display, aspect ratio selector buttons (9:16 Portrait, 16:9 Landscape, 1:1 Square) with visual icons, generate button that submits video.generate job, and results display showing generated video with preview player, download button, and add-to-timeline button",
+      "reqIds": [
+        "REQ-83"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-autoenhance-page-component-in-frontend-src-pages-ai-autoenhance-tsx-with-glassmorphism-panel-video-audio-upload-zone-video-enhancement-section-with-toggle-switches-for-auto-color-correction-balance-exposure-and-white-balance-sharpen-enhance-detail-and-clarity-and-denoise-reduce-grain-audio-enhancement-section-with-toggle-switches-for-noise-removal-remove-background-noise-voice-boost-enhance-vocal-clarity-and-normalize-loudness-consistent-volume-real-time-preview-toggle-enhance-button-that-submits-enhance-job-with-selected-options-and-results-display-with-before-after-comparison-slider-download-button-and-add-to-timeline-button",
+      "title": "Create AutoEnhance page component in frontend/src/pages/ai/AutoEnhance.tsx with glassmorphism panel, video/audio upload zone, Video Enhancement section with toggle switches for Auto Color Correction (balance exposure and white balance), Sharpen (enhance detail and clarity), and Denoise (reduce grain), Audio Enhancement section with toggle switches for Noise Removal (remove background noise), Voice Boost (enhance vocal clarity), and Normalize Loudness (consistent volume), real-time preview toggle, enhance button that submits enhance job with selected options, and results display with before/after comparison slider, download button, and add-to-timeline button",
+      "reqIds": [
+        "REQ-86"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-autoupscale-page-component-in-frontend-src-pages-ai-autoupscale-tsx-with-glassmorphism-panel-media-upload-zone-accepting-both-images-and-videos-current-resolution-display-target-resolution-selector-with-radio-buttons-1080p-full-hd-4k-ultra-hd-8k-showing-output-dimensions-and-estimated-file-size-enhancement-options-section-with-face-preservation-toggle-preserve-facial-details-during-upscaling-and-noise-reduction-toggle-reduce-artifacts-upscale-button-that-submits-upscale-job-and-results-display-with-side-by-side-comparison-at-100-zoom-quality-metrics-display-download-button-and-replace-in-timeline-button",
+      "title": "Create AutoUpscale page component in frontend/src/pages/ai/AutoUpscale.tsx with glassmorphism panel, media upload zone accepting both images and videos, current resolution display, target resolution selector with radio buttons (1080p Full HD, 4K Ultra HD, 8K) showing output dimensions and estimated file size, enhancement options section with Face Preservation toggle (preserve facial details during upscaling) and Noise Reduction toggle (reduce artifacts), upscale button that submits upscale job, and results display with side-by-side comparison at 100% zoom, quality metrics display, download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-87"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-ai-knowledge-base-data-file-in-frontend-src-data-aiknowledgebase-ts-with-structured-knowledge-object-containing-tools-section-describing-all-7-ai-tools-with-name-description-and-use-cases-editor-section-describing-timeline-effects-clips-tracks-keyframes-inspector-toolbar-features-workflows-section-with-step-by-step-instructions-for-common-tasks-adding-media-creating-animations-applying-effects-exporting-projects-and-troubleshooting-section-with-common-issues-and-solutions",
+      "title": "Create AI knowledge base data file in frontend/src/data/aiKnowledgeBase.ts with structured knowledge object containing tools section describing all 7 AI tools with name, description, and use cases, editor section describing timeline, effects, clips, tracks, keyframes, inspector, toolbar features, workflows section with step-by-step instructions for common tasks (adding media, creating animations, applying effects, exporting projects), and troubleshooting section with common issues and solutions",
+      "reqIds": [
+        "REQ-88"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-aiassistant-component-in-frontend-src-components-aiassistant-tsx-as-floating-help-panel-with-glassmorphism-styling-collapsible-expandable-toggle-button-with-chat-icon-message-history-display-showing-user-messages-and-ai-responses-with-timestamps-input-field-with-placeholder-ask-me-anything-about-editing-send-button-quick-action-buttons-for-common-questions-how-do-i-add-subtitles-how-do-i-export-what-ai-tools-are-available-how-do-i-animate-clips-and-chat-help-job-submission-that-queries-knowledge-base-for-context-aware-responses",
+      "title": "Create AIAssistant component in frontend/src/components/AIAssistant.tsx as floating help panel with glassmorphism styling, collapsible/expandable toggle button with chat icon, message history display showing user messages and AI responses with timestamps, input field with placeholder 'Ask me anything about editing...', send button, quick action buttons for common questions (How do I add subtitles?, How do I export?, What AI tools are available?, How do I animate clips?), and chat.help job submission that queries knowledge base for context-aware responses",
+      "reqIds": [
+        "REQ-89"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-aijobstatus-component-in-frontend-src-components-aijobstatus-tsx-that-displays-active-ai-jobs-in-a-glassmorphism-panel-with-job-list-showing-job-type-icon-job-name-progress-bar-with-percentage-status-message-queued-processing-completed-failed-estimated-time-remaining-cancel-button-for-queued-processing-jobs-retry-button-for-failed-jobs-and-view-results-button-for-completed-jobs-that-navigates-to-appropriate-result-display",
+      "title": "Create AIJobStatus component in frontend/src/components/AIJobStatus.tsx that displays active AI jobs in a glassmorphism panel with job list showing job type icon, job name, progress bar with percentage, status message (Queued, Processing, Completed, Failed), estimated time remaining, cancel button for queued/processing jobs, retry button for failed jobs, and view results button for completed jobs that navigates to appropriate result display",
+      "reqIds": [
+        "REQ-90"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-home-page-component-in-frontend-src-pages-home-tsx-to-add-ai-tools-section-after-create-section-displaying-grid-of-7-ai-tool-cards-image-generator-video-generator-auto-cut-auto-subtitles-auto-enhance-auto-upscale-ai-assistant-with-glassmorphism-styling-each-card-showing-tool-icon-name-short-description-and-navigation-to-respective-ai-tool-page-on-click",
+      "title": "Update Home page component in frontend/src/pages/Home.tsx to add AI Tools section after Create section, displaying grid of 7 AI tool cards (Image Generator, Video Generator, Auto Cut, Auto Subtitles, Auto Enhance, Auto Upscale, AI Assistant) with glassmorphism styling, each card showing tool icon, name, short description, and navigation to respective AI tool page on click",
+      "reqIds": [
+        "REQ-91"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-routes-in-router-tsx-for-all-7-ai-tool-pages-ai-image-gen-pointing-to-imagegenerator-component-ai-video-gen-pointing-to-videogenerator-component-ai-auto-cut-pointing-to-existing-autocutwizard-component-ai-auto-subtitle-pointing-to-existing-captionswizard-component-ai-enhance-pointing-to-autoenhance-component-ai-upscale-pointing-to-autoupscale-component-ai-assistant-pointing-to-full-page-aiassistant-component-all-wrapped-with-pagetransition-for-consistent-3d-navigation-effects",
+      "title": "Add routes in Router.tsx for all 7 AI tool pages: /ai/image-gen pointing to ImageGenerator component, /ai/video-gen pointing to VideoGenerator component, /ai/auto-cut pointing to existing AutoCutWizard component, /ai/auto-subtitle pointing to existing CaptionsWizard component, /ai/enhance pointing to AutoEnhance component, /ai/upscale pointing to AutoUpscale component, /ai/assistant pointing to full-page AIAssistant component, all wrapped with PageTransition for consistent 3D navigation effects",
+      "reqIds": [
+        "REQ-92"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-integrate-aiassistant-component-into-videoeditor-page-in-frontend-src-pages-videoeditor-tsx-as-floating-help-button-in-bottom-right-corner-with-chat-icon-clicking-button-opens-aiassistant-panel-overlaying-editor-interface-panel-can-be-moved-dragged-collapsed-to-minimize-and-closed-assistant-automatically-includes-editor-context-current-project-state-selected-clips-active-tools-when-submitting-chat-help-jobs-for-more-relevant-responses",
+      "title": "Integrate AIAssistant component into VideoEditor page in frontend/src/pages/VideoEditor.tsx as floating help button in bottom-right corner with chat icon, clicking button opens AIAssistant panel overlaying editor interface, panel can be moved/dragged, collapsed to minimize, and closed, assistant automatically includes editor context (current project state, selected clips, active tools) when submitting chat.help jobs for more relevant responses",
+      "reqIds": [
+        "REQ-93"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-automatic-asset-library-integration-in-useaijob-hook-that-detects-completed-image-generate-and-video-generate-jobs-extracts-generated-media-urls-from-job-results-creates-new-asset-entries-with-metadata-name-type-source-ai-generated-timestamp-and-displays-success-notification-with-view-in-assets-action-button",
+      "title": "Implement automatic asset library integration in useAIJob hook that detects completed image.generate and video.generate jobs, extracts generated media URLs from job results, creates new asset entries with metadata (name, type, source: 'ai-generated', timestamp), and displays success notification with 'View in Assets' action button",
+      "reqIds": [
+        "REQ-94"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-automatic-timeline-integration-in-useaijob-hook-that-detects-completed-auto-cut-auto-subtitle-and-enhance-jobs-extracts-edited-clips-subtitle-tracks-from-job-results-creates-new-clips-on-timeline-with-appropriate-layer-placement-auto-cut-replaces-original-clip-auto-subtitle-creates-new-text-layer-enhance-replaces-original-with-enhanced-version-applies-proper-timing-and-transforms-and-displays-success-notification-with-view-on-timeline-action-button",
+      "title": "Implement automatic timeline integration in useAIJob hook that detects completed auto.cut, auto.subtitle, and enhance jobs, extracts edited clips/subtitle tracks from job results, creates new clips on timeline with appropriate layer placement (auto.cut replaces original clip, auto.subtitle creates new text layer, enhance replaces original with enhanced version), applies proper timing and transforms, and displays success notification with 'View on Timeline' action button",
+      "reqIds": [
+        "REQ-95"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-homesections-ts-data-file-in-frontend-src-data-homesections-ts-to-add-all-7-ai-tool-routes-to-ai-tools-section-image-generator-ai-image-gen-video-generator-ai-video-gen-auto-cut-ai-auto-cut-auto-subtitles-ai-auto-subtitle-auto-enhance-ai-enhance-auto-upscale-ai-upscale-ai-assistant-ai-assistant",
+      "title": "Update homeSections.ts data file in frontend/src/data/homeSections.ts to add all 7 AI tool routes to AI Tools section: Image Generator (/ai/image-gen), Video Generator (/ai/video-gen), Auto Cut (/ai/auto-cut), Auto Subtitles (/ai/auto-subtitle), Auto Enhance (/ai/enhance), Auto Upscale (/ai/upscale), AI Assistant (/ai/assistant)",
+      "reqIds": [
+        "REQ-96"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-shared-ai-types-file-in-frontend-src-types-aitypes-ts-defining-aijobstatus-type-queued-processing-completed-failed-aijobresult-interface-with-success-boolean-and-data-any-field-and-aiprovider-type-mock-replicate-huggingface-custom-for-configuring-ai-service-providers",
+      "title": "Create shared AI types file in frontend/src/types/aiTypes.ts defining AIJobStatus type ('queued' | 'processing' | 'completed' | 'failed'), AIJobResult interface with success boolean and data any field, and AIProvider type ('mock' | 'replicate' | 'huggingface' | 'custom') for configuring AI service providers",
+      "reqIds": [
+        "REQ-97"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-aijob-type-system-in-frontend-src-types-aijob-ts-to-include-all-generation-ai-operations-add-voice-clone-job-type-with-payload-interface-audiourl-string-voicename-string-music-generate-with-prompt-string-duration-number-mood-string-broll-generate-with-description-string-duration-number-logo-generate-with-brandname-string-style-string-colors-string-sticker-generate-with-prompt-string-style-string-character-generate-with-description-string-consistency-boolean",
+      "title": "Expand AIJob type system in frontend/src/types/aiJob.ts to include all Generation AI operations: add voice.clone job type with payload interface {audioUrl: string, voiceName: string}, music.generate with {prompt: string, duration: number, mood: string}, broll.generate with {description: string, duration: number}, logo.generate with {brandName: string, style: string, colors: string[]}, sticker.generate with {prompt: string, style: string}, character.generate with {description: string, consistency: boolean}",
+      "reqIds": [
+        "REQ-134"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-aijob-type-system-in-frontend-src-types-aijob-ts-to-include-all-editing-ai-operations-add-highlight-detect-with-payload-videourl-string-criteria-string-timeline-suggest-with-videourl-string-suggesttype-cuts-effects-zooms-motion-autokeyframe-with-clipid-string-property-string-motion-autoeasing-with-clipid-string-camera-shake-with-clipid-string-intensity-number-parallax-create-with-clipid-string-depth-number",
+      "title": "Expand AIJob type system in frontend/src/types/aiJob.ts to include all Editing AI operations: add highlight.detect with payload {videoUrl: string, criteria: string[]}, timeline.suggest with {videoUrl: string, suggestType: 'cuts'|'effects'|'zooms'}, motion.autoKeyframe with {clipId: string, property: string}, motion.autoEasing with {clipId: string}, camera.shake with {clipId: string, intensity: number}, parallax.create with {clipId: string, depth: number}",
+      "reqIds": [
+        "REQ-135"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-aijob-type-system-in-frontend-src-types-aijob-ts-to-include-all-enhancement-ai-operations-add-hdr-enhance-with-payload-mediaurl-string-skin-correct-with-videourl-string-flicker-remove-with-videourl-string-face-restore-with-mediaurl-string-video-restore-with-videourl-string-type-old-damaged",
+      "title": "Expand AIJob type system in frontend/src/types/aiJob.ts to include all Enhancement AI operations: add hdr.enhance with payload {mediaUrl: string}, skin.correct with {videoUrl: string}, flicker.remove with {videoUrl: string}, face.restore with {mediaUrl: string}, video.restore with {videoUrl: string, type: 'old'|'damaged'}",
+      "reqIds": [
+        "REQ-136"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-aijob-type-system-in-frontend-src-types-aijob-ts-to-include-all-creator-ai-operations-add-subtitle-animate-with-payload-subtitleid-string-animation-string-emoji-insert-with-subtitleid-string-keyword-string-template-apply-with-templateid-string-projectid-string-brand-apply-with-brandkitid-string-projectid-string-object-track-with-videourl-string-objecttype-string-face-track-with-videourl-string-effect-glow-with-clipid-string-color-string-intensity-number-effect-blur-with-clipid-string-radius-number-greenscreen-remove-with-videourl-string",
+      "title": "Expand AIJob type system in frontend/src/types/aiJob.ts to include all Creator AI operations: add subtitle.animate with payload {subtitleId: string, animation: string}, emoji.insert with {subtitleId: string, keyword: string}, template.apply with {templateId: string, projectId: string}, brand.apply with {brandKitId: string, projectId: string}, object.track with {videoUrl: string, objectType: string}, face.track with {videoUrl: string}, effect.glow with {clipId: string, color: string, intensity: number}, effect.blur with {clipId: string, radius: number}, greenscreen.remove with {videoUrl: string}",
+      "reqIds": [
+        "REQ-137"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-aijob-type-system-in-frontend-src-types-aijob-ts-to-include-all-assistant-ai-command-operations-add-command-cinematic-with-payload-clipid-string-command-fixcoloraudio-with-videourl-string-command-viralreel-with-videourl-string-help-stepbystep-with-task-string-help-explain-with-concept-string",
+      "title": "Expand AIJob type system in frontend/src/types/aiJob.ts to include all Assistant AI command operations: add command.cinematic with payload {clipId: string}, command.fixColorAudio with {videoUrl: string}, command.viralReel with {videoUrl: string}, help.stepByStep with {task: string}, help.explain with {concept: string}",
+      "reqIds": [
+        "REQ-138"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-aijob-type-system-in-frontend-src-types-aijob-ts-to-include-all-growth-ai-operations-add-title-generate-with-payload-videodescription-string-platform-string-hook-generate-with-videodescription-string-caption-generate-with-videodescription-string-tone-string-hashtag-generate-with-videodescription-string-platform-string-virality-predict-with-videourl-string-posttime-suggest-with-platform-string-audience-string-abtest-create-with-variations-string",
+      "title": "Expand AIJob type system in frontend/src/types/aiJob.ts to include all Growth AI operations: add title.generate with payload {videoDescription: string, platform: string}, hook.generate with {videoDescription: string}, caption.generate with {videoDescription: string, tone: string}, hashtag.generate with {videoDescription: string, platform: string}, virality.predict with {videoUrl: string}, postTime.suggest with {platform: string, audience: string}, abTest.create with {variations: string[]}",
+      "reqIds": [
+        "REQ-139"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-aijob-type-system-in-frontend-src-types-aijob-ts-to-include-all-experimental-ai-operations-add-actor-replace-with-payload-videourl-string-targetfaceurl-string-avatar-create-with-script-string-avatarstyle-string-eyecontact-correct-with-videourl-string-gesture-add-with-videourl-string-gesturetype-string-script-tovideo-with-script-string-style-string-camera-frame-with-videourl-string-framingtype-string-text-toshortvideo-with-prompt-string-duration-number",
+      "title": "Expand AIJob type system in frontend/src/types/aiJob.ts to include all Experimental AI operations: add actor.replace with payload {videoUrl: string, targetFaceUrl: string}, avatar.create with {script: string, avatarStyle: string}, eyeContact.correct with {videoUrl: string}, gesture.add with {videoUrl: string, gestureType: string}, script.toVideo with {script: string, style: string}, camera.frame with {videoUrl: string, framingType: string}, text.toShortVideo with {prompt: string, duration: number}",
+      "reqIds": [
+        "REQ-140"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aiservice-ts-in-frontend-src-services-aiservice-ts-to-add-integration-points-for-all-generation-ai-providers-with-mock-implementations-voicecloneintegration-with-elevenlabs-api-configuration-placeholder-and-mock-returning-audio-url-musicgenerateintegration-with-soundraw-aiva-api-placeholder-and-mock-returning-audio-url-brollgenerateintegration-with-runway-pika-api-placeholder-and-mock-returning-video-url-logogenerateintegration-with-logoai-api-placeholder-and-mock-returning-image-urls-array-stickergenerateintegration-with-dall-e-api-placeholder-and-mock-returning-image-url-charactergenerateintegration-with-midjourney-api-consistency-mode-placeholder-and-mock-returning-character-images-array",
+      "title": "Update aiService.ts in frontend/src/services/aiService.ts to add integration points for all Generation AI providers with mock implementations: voiceCloneIntegration with ElevenLabs API configuration placeholder and mock returning audio URL, musicGenerateIntegration with Soundraw/AIVA API placeholder and mock returning audio URL, brollGenerateIntegration with Runway/Pika API placeholder and mock returning video URL, logoGenerateIntegration with LogoAI API placeholder and mock returning image URLs array, stickerGenerateIntegration with DALL-E API placeholder and mock returning image URL, characterGenerateIntegration with Midjourney API consistency mode placeholder and mock returning character images array",
+      "reqIds": [
+        "REQ-146"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aiservice-ts-to-add-integration-points-for-all-editing-ai-providers-with-mock-implementations-highlightdetectintegration-with-custom-ml-model-placeholder-and-mock-returning-array-of-highlight-segments-with-timestamps-and-confidence-scores-timelinesuggestintegration-with-gpt-4-vision-api-placeholder-and-mock-returning-array-of-suggestions-with-types-and-timestamps-motionaiintegration-with-runway-motion-api-placeholder-and-mock-returning-keyframe-data-and-mock-implementations-for-all-6-editing-ai-operations-returning-structured-placeholder-data",
+      "title": "Update aiService.ts to add integration points for all Editing AI providers with mock implementations: highlightDetectIntegration with custom ML model placeholder and mock returning array of highlight segments with timestamps and confidence scores, timelineSuggestIntegration with GPT-4 Vision API placeholder and mock returning array of suggestions with types and timestamps, motionAIIntegration with Runway Motion API placeholder and mock returning keyframe data, and mock implementations for all 6 Editing AI operations returning structured placeholder data",
+      "reqIds": [
+        "REQ-147"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aiservice-ts-to-add-integration-points-for-all-enhancement-ai-providers-with-mock-implementations-hdrenhanceintegration-with-custom-shader-pipeline-placeholder-and-mock-returning-enhanced-media-url-skincorrectintegration-with-faceapp-api-placeholder-and-mock-returning-corrected-video-url-flickerremoveintegration-with-topaz-video-ai-placeholder-and-mock-returning-processed-video-url-facerestoreintegration-with-codeformer-api-placeholder-and-mock-returning-restored-media-url-videorestoreintegration-with-topaz-video-ai-placeholder-and-mock-returning-restored-video-url-all-mock-implementations-returning-processed-media-urls-with-quality-metrics",
+      "title": "Update aiService.ts to add integration points for all Enhancement AI providers with mock implementations: hdrEnhanceIntegration with custom shader pipeline placeholder and mock returning enhanced media URL, skinCorrectIntegration with FaceApp API placeholder and mock returning corrected video URL, flickerRemoveIntegration with Topaz Video AI placeholder and mock returning processed video URL, faceRestoreIntegration with CodeFormer API placeholder and mock returning restored media URL, videoRestoreIntegration with Topaz Video AI placeholder and mock returning restored video URL, all mock implementations returning processed media URLs with quality metrics",
+      "reqIds": [
+        "REQ-148"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aiservice-ts-to-add-integration-points-for-all-creator-ai-providers-with-mock-implementations-subtitleanimateintegration-with-after-effects-api-placeholder-and-mock-returning-animated-subtitle-data-emojiinsertintegration-with-gpt-4-nlp-placeholder-and-mock-returning-subtitle-with-emojis-templateapplyintegration-with-custom-template-engine-placeholder-and-mock-returning-project-data-brandapplyintegration-with-brand-kit-manager-placeholder-and-mock-returning-updated-project-objecttrackintegration-with-opencv-js-placeholder-and-mock-returning-tracking-path-facetrackintegration-with-mediapipe-placeholder-and-mock-returning-face-tracking-data-effectsintegration-with-custom-webgl-shaders-placeholder-and-mock-returning-effect-parameters-greenscreenremoveintegration-with-segmentanything-api-placeholder-and-mock-returning-masked-video-url-all-mock-implementations-returning-appropriate-structured-data",
+      "title": "Update aiService.ts to add integration points for all Creator AI providers with mock implementations: subtitleAnimateIntegration with After Effects API placeholder and mock returning animated subtitle data, emojiInsertIntegration with GPT-4 NLP placeholder and mock returning subtitle with emojis, templateApplyIntegration with custom template engine placeholder and mock returning project data, brandApplyIntegration with brand kit manager placeholder and mock returning updated project, objectTrackIntegration with OpenCV.js placeholder and mock returning tracking path, faceTrackIntegration with MediaPipe placeholder and mock returning face tracking data, effectsIntegration with custom WebGL shaders placeholder and mock returning effect parameters, greenscreenRemoveIntegration with SegmentAnything API placeholder and mock returning masked video URL, all mock implementations returning appropriate structured data",
+      "reqIds": [
+        "REQ-149"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aiservice-ts-to-add-integration-points-for-all-growth-ai-providers-with-mock-implementations-titlegenerateintegration-with-gpt-4-api-fine-tuned-placeholder-and-mock-returning-10-title-variations-with-scores-hookgenerateintegration-with-claude-api-placeholder-and-mock-returning-10-hook-variations-with-scores-captiongenerateintegration-with-gpt-3-5-turbo-placeholder-and-mock-returning-5-caption-variations-hashtaggenerateintegration-with-custom-hashtag-database-placeholder-and-mock-returning-categorized-hashtags-with-metrics-viralitypredictintegration-with-custom-ml-model-placeholder-and-mock-returning-virality-scores-and-breakdown-posttimesuggestintegration-with-analytics-api-placeholder-and-mock-returning-recommended-times-with-engagement-rates-abtestintegration-with-experimentation-platform-placeholder-and-mock-returning-test-configuration-all-mock-implementations-returning-structured-data-with-predictions-and-metrics",
+      "title": "Update aiService.ts to add integration points for all Growth AI providers with mock implementations: titleGenerateIntegration with GPT-4 API fine-tuned placeholder and mock returning 10 title variations with scores, hookGenerateIntegration with Claude API placeholder and mock returning 10 hook variations with scores, captionGenerateIntegration with GPT-3.5 Turbo placeholder and mock returning 5 caption variations, hashtagGenerateIntegration with custom hashtag database placeholder and mock returning categorized hashtags with metrics, viralityPredictIntegration with custom ML model placeholder and mock returning virality scores and breakdown, postTimeSuggestIntegration with analytics API placeholder and mock returning recommended times with engagement rates, abTestIntegration with experimentation platform placeholder and mock returning test configuration, all mock implementations returning structured data with predictions and metrics",
+      "reqIds": [
+        "REQ-150"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aiservice-ts-to-add-integration-points-for-all-experimental-ai-providers-with-mock-implementations-actorreplaceintegration-with-deepfacelab-api-placeholder-and-mock-returning-face-swapped-video-url-avatarcreateintegration-with-synthesia-api-placeholder-and-mock-returning-avatar-video-url-eyecontactcorrectintegration-with-custom-cv-model-placeholder-and-mock-returning-corrected-video-url-gestureaddintegration-with-runway-api-placeholder-and-mock-returning-video-with-gesture-overlay-scripttovideointegration-with-pictory-api-placeholder-and-mock-returning-full-video-with-scene-breakdown-cameraframeintegration-with-gpt-4-vision-placeholder-and-mock-returning-reframed-video-url-texttoshortvideointegration-with-full-pipeline-orchestrator-placeholder-and-mock-returning-complete-short-video-all-mock-implementations-returning-video-urls-and-metadata",
+      "title": "Update aiService.ts to add integration points for all Experimental AI providers with mock implementations: actorReplaceIntegration with DeepFaceLab API placeholder and mock returning face-swapped video URL, avatarCreateIntegration with Synthesia API placeholder and mock returning avatar video URL, eyeContactCorrectIntegration with custom CV model placeholder and mock returning corrected video URL, gestureAddIntegration with Runway API placeholder and mock returning video with gesture overlay, scriptToVideoIntegration with Pictory API placeholder and mock returning full video with scene breakdown, cameraFrameIntegration with GPT-4 Vision placeholder and mock returning reframed video URL, textToShortVideoIntegration with full pipeline orchestrator placeholder and mock returning complete short video, all mock implementations returning video URLs and metadata",
+      "reqIds": [
+        "REQ-151"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-aitoolcard-component-in-frontend-src-components-aitoolcard-tsx-with-glassmorphism-styling-bg-white-10-backdrop-blur-xl-category-badge-display-with-category-specific-colors-generation-purple-editing-blue-enhancement-green-creator-orange-assistant-cyan-growth-pink-experimental-red-tool-icon-with-animated-gradient-background-tool-name-as-heading-tool-description-as-subtext-hover-effect-with-scale-105-and-enhanced-glow-animation-click-navigation-to-tool-page-using-tanstack-router-and-responsive-sizing-full-width-mobile-fixed-width-desktop",
+      "title": "Create AIToolCard component in frontend/src/components/AIToolCard.tsx with glassmorphism styling (bg-white/10 backdrop-blur-xl), category badge display with category-specific colors (Generation: purple, Editing: blue, Enhancement: green, Creator: orange, Assistant: cyan, Growth: pink, Experimental: red), tool icon with animated gradient background, tool name as heading, tool description as subtext, hover effect with scale-105 and enhanced glow animation, click navigation to tool page using TanStack router, and responsive sizing (full-width mobile, fixed-width desktop)",
+      "reqIds": [
+        "REQ-160"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-useaijob-hook-in-frontend-src-hooks-useaijob-ts-to-implement-comprehensive-job-lifecycle-management-submitaijob-function-using-react-query-mutation-calling-backend-submitjob-status-polling-using-react-query-with-2-second-interval-checking-job-status-until-completed-or-failed-result-retrieval-calling-backend-getjobresults-when-status-is-completed-automatic-asset-integration-for-generation-ai-jobs-adding-results-to-asset-library-automatic-timeline-integration-for-editing-creator-ai-jobs-creating-new-clips-layers-and-category-specific-success-notifications-with-action-buttons",
+      "title": "Update useAIJob hook in frontend/src/hooks/useAIJob.ts to implement comprehensive job lifecycle management: submitAIJob function using React Query mutation calling backend submitJob, status polling using React Query with 2-second interval checking job status until completed or failed, result retrieval calling backend getJobResults when status is completed, automatic asset integration for Generation AI jobs adding results to asset library, automatic timeline integration for Editing/Creator AI jobs creating new clips/layers, and category-specific success notifications with action buttons",
+      "reqIds": [
+        "REQ-173"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-all-43-ai-tool-page-components-in-frontend-src-pages-ai-directory-following-consistent-structure-glassmorphism-panel-with-bg-white-10-backdrop-blur-xl-input-sections-with-appropriate-controls-file-upload-text-input-sliders-dropdowns-toggles-configuration-panels-with-job-specific-options-preview-sections-showing-real-time-adjustments-submit-button-triggering-useaijob-with-job-type-and-payload-and-results-display-with-before-after-comparison-download-button-and-integration-buttons-add-to-assets-add-to-timeline-replace-in-timeline",
+      "title": "Create all 43 AI tool page components in frontend/src/pages/ai directory following consistent structure: glassmorphism panel with bg-white/10 backdrop-blur-xl, input sections with appropriate controls (file upload, text input, sliders, dropdowns, toggles), configuration panels with job-specific options, preview sections showing real-time adjustments, submit button triggering useAIJob with job type and payload, and results display with before/after comparison, download button, and integration buttons (add-to-assets, add-to-timeline, replace-in-timeline)",
+      "reqIds": [
+        "REQ-174"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-all-43-ai-tool-routes-to-router-tsx-organized-by-category-generation-ai-routes-ai-voice-clone-ai-music-gen-ai-broll-gen-ai-logo-gen-ai-sticker-gen-ai-character-gen-editing-ai-routes-ai-highlight-detect-ai-timeline-ai-ai-motion-ai-enhancement-ai-routes-ai-hdr-enhance-ai-skin-correct-ai-flicker-remove-ai-face-restore-ai-video-restore-creator-ai-routes-ai-subtitle-animate-ai-emoji-insert-ai-template-apply-ai-brand-kit-ai-object-track-ai-effect-studio-ai-greenscreen-remove-assistant-ai-routes-ai-help-wizard-growth-ai-routes-ai-title-gen-ai-hook-gen-ai-caption-gen-ai-hashtag-gen-ai-virality-predict-ai-post-time-ai-ab-test-experimental-ai-routes-ai-actor-replace-ai-avatar-create-ai-eye-contact-ai-gesture-add-ai-script-to-video-ai-camera-frame-ai-text-to-short-all-wrapped-with-pagetransition-component",
+      "title": "Add all 43 AI tool routes to Router.tsx organized by category: Generation AI routes (/ai/voice-clone, /ai/music-gen, /ai/broll-gen, /ai/logo-gen, /ai/sticker-gen, /ai/character-gen), Editing AI routes (/ai/highlight-detect, /ai/timeline-ai, /ai/motion-ai), Enhancement AI routes (/ai/hdr-enhance, /ai/skin-correct, /ai/flicker-remove, /ai/face-restore, /ai/video-restore), Creator AI routes (/ai/subtitle-animate, /ai/emoji-insert, /ai/template-apply, /ai/brand-kit, /ai/object-track, /ai/effect-studio, /ai/greenscreen-remove), Assistant AI routes (/ai/help-wizard), Growth AI routes (/ai/title-gen, /ai/hook-gen, /ai/caption-gen, /ai/hashtag-gen, /ai/virality-predict, /ai/post-time, /ai/ab-test), Experimental AI routes (/ai/actor-replace, /ai/avatar-create, /ai/eye-contact, /ai/gesture-add, /ai/script-to-video, /ai/camera-frame, /ai/text-to-short), all wrapped with PageTransition component",
+      "reqIds": [
+        "REQ-175"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-home-page-in-frontend-src-pages-home-tsx-to-expand-ai-tools-section-with-category-organized-navigation-displaying-8-ai-category-sections-generation-editing-enhancement-creator-assistant-growth-experimental-system-as-collapsible-panels-each-category-header-showing-category-name-with-icon-and-tool-count-badge-category-content-as-responsive-grid-grid-cols-4-gap-6-desktop-grid-cols-2-gap-4-mobile-of-aitoolcard-components-category-specific-color-themes-generation-purple-500-editing-blue-500-enhancement-green-500-creator-orange-500-assistant-cyan-500-growth-pink-500-experimental-red-500-and-expand-collapse-functionality-using-react-state",
+      "title": "Update Home page in frontend/src/pages/Home.tsx to expand AI Tools section with category-organized navigation displaying 8 AI category sections (Generation, Editing, Enhancement, Creator, Assistant, Growth, Experimental, System) as collapsible panels, each category header showing category name with icon and tool count badge, category content as responsive grid (grid-cols-4 gap-6 desktop, grid-cols-2 gap-4 mobile) of AIToolCard components, category-specific color themes (Generation: purple-500, Editing: blue-500, Enhancement: green-500, Creator: orange-500, Assistant: cyan-500, Growth: pink-500, Experimental: red-500), and expand/collapse functionality using React state",
+      "reqIds": [
+        "REQ-176"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-homesections-ts-data-file-in-frontend-src-data-homesections-ts-to-restructure-ai-tools-section-using-category-based-organization-with-8-category-objects-generation-ai-editing-ai-enhancement-ai-creator-ai-assistant-ai-growth-ai-experimental-ai-system-ai-each-category-containing-title-description-color-theme-icon-name-and-items-array-with-all-tools-in-that-category-including-name-description-and-route-path",
+      "title": "Update homeSections.ts data file in frontend/src/data/homeSections.ts to restructure AI Tools section using category-based organization with 8 category objects (Generation AI, Editing AI, Enhancement AI, Creator AI, Assistant AI, Growth AI, Experimental AI, System AI), each category containing title, description, color theme, icon name, and items array with all tools in that category including name, description, and route path",
+      "reqIds": [
+        "REQ-177"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aijobstatus-component-in-frontend-src-components-aijobstatus-tsx-to-support-all-50-job-types-with-job-type-mapping-object-defining-icon-label-and-category-for-each-job-type-category-filter-dropdown-allowing-users-to-filter-by-ai-category-all-generation-editing-enhancement-creator-assistant-growth-experimental-color-coded-progress-bars-using-category-colors-expanded-job-details-panel-showing-job-configuration-parameters-and-payload-data-and-real-time-status-updates-using-react-query-with-2-second-refresh-interval",
+      "title": "Update AIJobStatus component in frontend/src/components/AIJobStatus.tsx to support all 50+ job types with job type mapping object defining icon, label, and category for each job type, category filter dropdown allowing users to filter by AI category (All, Generation, Editing, Enhancement, Creator, Assistant, Growth, Experimental), color-coded progress bars using category colors, expanded job details panel showing job configuration parameters and payload data, and real-time status updates using React Query with 2-second refresh interval",
+      "reqIds": [
+        "REQ-178"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aiservice-ts-in-frontend-src-services-aiservice-ts-to-implement-complete-mock-ai-functions-for-all-50-job-types-with-realistic-placeholder-data-mockvoiceclone-returning-audiourl-string-voiceid-string-samplerate-number-mockmusicgenerate-returning-audiourl-string-duration-number-bpm-number-waveform-number-mockbrollgenerate-returning-videourl-string-scenes-array-start-number-end-number-description-string-mocklogogenerate-returning-logos-array-url-string-variant-string-mockstickergenerate-returning-imageurl-string-transparent-boolean-mockcharactergenerate-returning-images-array-url-string-pose-string-consistency-number-and-similar-structured-responses-for-all-remaining-43-job-types",
+      "title": "Update aiService.ts in frontend/src/services/aiService.ts to implement complete mock AI functions for all 50+ job types with realistic placeholder data: mockVoiceClone returning {audioUrl: string, voiceId: string, sampleRate: number}, mockMusicGenerate returning {audioUrl: string, duration: number, bpm: number, waveform: number[]}, mockBRollGenerate returning {videoUrl: string, scenes: Array<{start: number, end: number, description: string}>}, mockLogoGenerate returning {logos: Array<{url: string, variant: string}>}, mockStickerGenerate returning {imageUrl: string, transparent: boolean}, mockCharacterGenerate returning {images: Array<{url: string, pose: string}>, consistency: number}, and similar structured responses for all remaining 43+ job types",
+      "reqIds": [
+        "REQ-187"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-api-integration-points-to-aiservice-ts-for-all-external-ai-providers-with-configuration-objects-elevenlabsconfig-for-voice-cloning-apikey-string-voiceid-string-stability-number-similarity-number-replicateconfig-for-image-video-generation-apikey-string-models-image-string-video-string-runwayconfig-for-motion-ai-apikey-string-projectid-string-huggingfaceconfig-for-nlp-tasks-apikey-string-models-record-string-string-openaiconfig-for-gpt-tasks-apikey-string-model-string-temperature-number-and-provider-specific-request-handlers-with-error-handling-retry-logic-3-attempts-with-exponential-backoff-and-timeout-handling-30s-timeout",
+      "title": "Add API integration points to aiService.ts for all external AI providers with configuration objects: elevenlabsConfig for voice cloning {apiKey: string, voiceId: string, stability: number, similarity: number}, replicateConfig for image/video generation {apiKey: string, models: {image: string, video: string}}, runwayConfig for motion AI {apiKey: string, projectId: string}, huggingfaceConfig for NLP tasks {apiKey: string, models: Record<string, string>}, openaiConfig for GPT tasks {apiKey: string, model: string, temperature: number}, and provider-specific request handlers with error handling, retry logic (3 attempts with exponential backoff), and timeout handling (30s timeout)",
+      "reqIds": [
+        "REQ-188"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-useaijob-hook-in-frontend-src-hooks-useaijob-ts-to-implement-comprehensive-job-lifecycle-management-for-all-50-job-types-with-submitaijob-function-using-react-query-mutation-calling-backend-submitjob-status-polling-using-react-query-with-configurable-2-second-interval-checking-job-status-until-completed-or-failed-result-retrieval-calling-backend-getjobresults-when-status-is-completed-automatic-asset-integration-for-generation-ai-jobs-image-generate-video-generate-voice-clone-music-generate-broll-generate-logo-generate-sticker-generate-character-generate-adding-results-to-asset-library-with-metadata-automatic-timeline-integration-for-editing-creator-ai-jobs-creating-new-clips-layers-with-proper-timing-and-transforms-and-category-specific-success-notifications-with-action-buttons-view-in-assets-view-on-timeline-apply-changes-download",
+      "title": "Update useAIJob hook in frontend/src/hooks/useAIJob.ts to implement comprehensive job lifecycle management for all 50+ job types with submitAIJob function using React Query mutation calling backend submitJob, status polling using React Query with configurable 2-second interval checking job status until 'completed' or 'failed', result retrieval calling backend getJobResults when status is 'completed', automatic asset integration for Generation AI jobs (image.generate, video.generate, voice.clone, music.generate, broll.generate, logo.generate, sticker.generate, character.generate) adding results to asset library with metadata, automatic timeline integration for Editing/Creator AI jobs creating new clips/layers with proper timing and transforms, and category-specific success notifications with action buttons (View in Assets, View on Timeline, Apply Changes, Download)",
+      "reqIds": [
+        "REQ-189"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aiassistant-component-in-frontend-src-components-aiassistant-tsx-to-add-command-interface-panel-with-quick-command-buttons-section-displaying-10-glassmorphism-buttons-make-this-cinematic-fix-color-and-audio-turn-into-viral-reel-optimize-for-youtube-add-motion-blur-balance-exposure-remove-background-noise-add-dynamic-transitions-enhance-faces-generate-captions-command-input-field-with-autocomplete-dropdown-showing-matching-commands-from-aiknowledgebase-as-user-types-command-history-panel-showing-last-20-executed-commands-with-timestamps-and-result-summaries-and-command-execution-handler-mapping-commands-to-appropriate-ai-job-submissions-command-cinematic-command-fixcoloraudio-command-viralreel-with-automatic-parameter-inference-from-editor-context-selected-clips-project-settings",
+      "title": "Update AIAssistant component in frontend/src/components/AIAssistant.tsx to add command interface panel with quick command buttons section displaying 10 glassmorphism buttons ('Make this cinematic', 'Fix color and audio', 'Turn into viral reel', 'Optimize for YouTube', 'Add motion blur', 'Balance exposure', 'Remove background noise', 'Add dynamic transitions', 'Enhance faces', 'Generate captions'), command input field with autocomplete dropdown showing matching commands from aiKnowledgeBase as user types, command history panel showing last 20 executed commands with timestamps and result summaries, and command execution handler mapping commands to appropriate AI job submissions (command.cinematic, command.fixColorAudio, command.viralReel) with automatic parameter inference from editor context (selected clips, project settings)",
+      "reqIds": [
+        "REQ-190"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-aijobstatus-component-in-frontend-src-components-aijobstatus-tsx-to-support-all-50-job-types-with-jobtypemapping-object-defining-icon-label-and-category-for-each-job-type-category-filter-dropdown-allowing-users-to-filter-by-ai-category-all-generation-editing-enhancement-creator-assistant-growth-experimental-color-coded-progress-bars-using-category-specific-colors-generation-purple-editing-blue-enhancement-green-creator-orange-assistant-cyan-growth-pink-experimental-red-expanded-job-details-panel-showing-job-configuration-parameters-and-payload-data-in-formatted-json-and-real-time-status-updates-using-react-query-with-2-second-refresh-interval",
+      "title": "Update AIJobStatus component in frontend/src/components/AIJobStatus.tsx to support all 50+ job types with jobTypeMapping object defining icon, label, and category for each job type, category filter dropdown allowing users to filter by AI category (All, Generation, Editing, Enhancement, Creator, Assistant, Growth, Experimental), color-coded progress bars using category-specific colors (Generation: purple, Editing: blue, Enhancement: green, Creator: orange, Assistant: cyan, Growth: pink, Experimental: red), expanded job details panel showing job configuration parameters and payload data in formatted JSON, and real-time status updates using React Query with 2-second refresh interval",
+      "reqIds": [
+        "REQ-191"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-home-page-component-in-frontend-src-pages-home-tsx-to-display-all-50-ai-tools-organized-by-8-categories-generation-ai-with-8-tools-editing-ai-with-3-tools-enhancement-ai-with-7-tools-creator-ai-with-8-tools-assistant-ai-with-2-tools-growth-ai-with-7-tools-experimental-ai-with-8-tools-system-ai-with-backend-features-as-expandable-collapsible-category-sections-with-category-headers-showing-category-icon-name-tool-count-badge-and-expand-collapse-chevron-icon-category-content-as-responsive-grid-grid-cols-4-gap-6-on-desktop-grid-cols-2-gap-4-on-mobile-of-aitoolcard-components-category-specific-color-themes-matching-established-palette-expand-collapse-state-managed-with-react-usestate-and-smooth-height-transitions-using-css-transitions",
+      "title": "Update Home page component in frontend/src/pages/Home.tsx to display all 50+ AI tools organized by 8 categories (Generation AI with 8 tools, Editing AI with 3 tools, Enhancement AI with 7 tools, Creator AI with 8 tools, Assistant AI with 2 tools, Growth AI with 7 tools, Experimental AI with 8 tools, System AI with backend features) as expandable/collapsible category sections with category headers showing category icon, name, tool count badge, and expand/collapse chevron icon, category content as responsive grid (grid-cols-4 gap-6 on desktop, grid-cols-2 gap-4 on mobile) of AIToolCard components, category-specific color themes matching established palette, expand/collapse state managed with React useState, and smooth height transitions using CSS transitions",
+      "reqIds": [
+        "REQ-192"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-17",
+      "summary": "Update main.tsx to configure React Router with BrowserRouter wrapper and move existing App component content to /editor/video route, making Home page the new root route",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Add Framer Motion dependency to package.json if not already present and ensure React Router DOM is included for navigation functionality",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Create SearchBar component with CapCut-style design featuring glassmorphism background, filter button, and search input for templates/tools/projects/assets",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Build RecentProjects horizontal carousel component with glassmorphism cards, horizontal scroll, and support for cloud project loading",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Create TemplateCard component with 3D hover animations (scale 1.05, rotateY 8), gradient backgrounds, video preview capability, and preserve-3d transforms",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Implement AI wizard interfaces (AutoCutWizard, CaptionsWizard, BackgroundRemoveWizard, BeatSyncWizard) with multi-step UI pattern for guided workflows",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Create PageTransition wrapper component with Framer Motion for global 3D page transitions using rotateX animations and preserve-3d styling",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Restructure Home page layout to include SearchBar at top, RecentProjects carousel, Create section with Video/Photo/Auto Cut options, AI Tools section, and Templates grid with animated cards",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Update routing to wrap all page components with PageTransition for consistent 3D navigation effects across the application",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Update main.tsx to wrap App component with BrowserRouter from react-router-dom, ensuring all routing functionality is properly initialized at the application entry point",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Add framer-motion package to frontend dependencies if not already present, ensuring Framer Motion animations work throughout the application",
+      "reqIds": [
+        "REQ-47"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Update HomeOptionCard component in frontend/src/components/HomeOptionCard.tsx to use CSS-based 3D transforms instead of Framer Motion, implementing hover effects with pure CSS transitions (translateY, rotateX, rotateY), maintaining preserve-3d, cyan neon glow shadow, and TanStack router navigation",
+      "reqIds": [
+        "REQ-63"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-47",
+      "summary": "Update Router.tsx to remove any existing BrowserRouter wrapper in favor of using TanStack Router's native router implementation, ensuring proper RouterProvider configuration in App.tsx",
+      "reqIds": [
+        "REQ-77"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-48",
+      "summary": "Create shared AIJob type system in frontend/src/types/aiJob.ts with union type for all 7 AI operations (image.generate, video.generate, auto.cut, auto.subtitle, enhance, upscale, chat.help) with typed payloads",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-49",
+      "summary": "Implement AIJobManager Motoko actor in backend/src/main.mo with persistent job queue, submit/status/getResults methods, and job history tracking",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-50",
+      "summary": "Create ImageGenerator component in frontend/src/pages/ai/ImageGenerator.tsx with prompt input, size selection (1024x1024, 512x512), style options, and generate button that submits image.generate jobs",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-51",
+      "summary": "Create VideoGenerator component in frontend/src/pages/ai/VideoGenerator.tsx with prompt input, duration slider (3-10s), aspect ratio selection (9:16, 16:9, 1:1), and generate button that submits video.generate jobs",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-52",
+      "summary": "Create AutoCut component in frontend/src/pages/ai/AutoCut.tsx with video upload, style selection (reel/smooth/energetic/minimal), silence removal toggle, and processing that submits auto.cut jobs",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-53",
+      "summary": "Create AutoSubtitles component in frontend/src/pages/ai/AutoSubtitles.tsx with video upload, language dropdown, style selection (modern/classic/minimal), emoji toggle, and generate button that submits auto.subtitle jobs",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-54",
+      "summary": "Create AutoEnhance component in frontend/src/pages/ai/AutoEnhance.tsx with video upload, video enhancement toggles (color correction/exposure/sharpness), audio enhancement toggles (noise removal/voice boost/normalization), and process button that submits enhance jobs",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-55",
+      "summary": "Create AutoUpscale component in frontend/src/pages/ai/AutoUpscale.tsx with media upload, target resolution selection (1080p/4K/8K), face preservation toggle, noise reduction toggle, and upscale button that submits upscale jobs",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-56",
+      "summary": "Create AIAssistant component in frontend/src/components/AIAssistant.tsx with chat interface, message history, input field, and knowledge base integration for context-aware help",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-57",
+      "summary": "Create AI knowledge base in frontend/src/data/aiKnowledgeBase.ts with structured data about all 7 AI tools, editor features, and step-by-step instructions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-58",
+      "summary": "Create dual AI integration layer in frontend/src/services/aiService.ts with mock AI functions (returning placeholder data) and API integration points for Replicate, Hugging Face, and custom endpoints",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-59",
+      "summary": "Implement job submission hook useAIJob in frontend/src/hooks/useAIJob.ts that handles job creation, status polling, result retrieval, and automatic asset/timeline integration",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-60",
+      "summary": "Create AIJobStatus component in frontend/src/components/AIJobStatus.tsx that displays active jobs with progress indicators, status messages, and cancel/retry options",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-61",
+      "summary": "Update Home page to add AI Tools section cards linking to all 7 AI tool pages (Image Generator, Video Generator, Auto Cut, Auto Subtitles, Auto Enhance, Auto Upscale, AI Assistant)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-62",
+      "summary": "Add routes in Router.tsx for all 7 AI tool pages (/ai/image-gen, /ai/video-gen, /ai/auto-cut, /ai/auto-subtitle, /ai/enhance, /ai/upscale, /ai/assistant)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-63",
+      "summary": "Integrate AIAssistant into video editor interface as floating help panel accessible via button in toolbar",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-64",
+      "summary": "Implement automatic asset library integration that adds generated images/videos from AI tools directly to editor assets",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-65",
+      "summary": "Implement automatic timeline integration that adds auto-cut results, subtitles, and enhanced clips directly to timeline as editable layers",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-67",
+      "summary": "Implement AIJobManager Motoko actor in backend/main.mo with persistent job queue using stable variables, submit(job: Text) method returning job ID, status(id: Text) query returning job status ('queued' | 'processing' | 'completed' | 'failed'), getResults(id: Text) query returning job results, and job history tracking with timestamps",
+      "reqIds": [
+        "REQ-79"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-72",
+      "summary": "Update AutoCutWizard component in frontend/src/pages/ai/AutoCutWizard.tsx to implement full AI Auto Cut workflow: Step 1 with drag-and-drop video upload zone, Step 2 with style selection grid showing visual previews for 4 styles (Reel - fast cuts, Smooth - gentle transitions, Energetic - beat-matched cuts, Minimal - few cuts) and silence removal toggle, Step 3 with processing animation showing real-time progress (analyzing audio, detecting silence, creating cuts, applying transitions) and submit auto.cut job with selected options, Step 4 showing before/after timeline comparison with original vs edited version and export/add-to-timeline buttons",
+      "reqIds": [
+        "REQ-84"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-73",
+      "summary": "Update CaptionsWizard component in frontend/src/pages/ai/CaptionsWizard.tsx to implement full Auto Subtitles workflow: Step 1 with video upload UI, Step 2 with language dropdown (English, Spanish, French, German, Japanese, Korean, Chinese), font selector with preview showing 5 font options (Modern, Classic, Bold, Handwritten, Minimal), position selector (Top, Center, Bottom) with visual position preview, emoji toggle switch with description 'Add relevant emojis to captions', and style preset selector (Trendy, Corporate, Gaming, Vlog), Step 3 submitting auto.subtitle job and showing progress with speech recognition visualization, Step 4 displaying generated subtitles in editable list with word-level timestamps, text content, and emoji indicators, with preview player showing captions overlaid on video and export/add-to-timeline buttons",
+      "reqIds": [
+        "REQ-85"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-74",
+      "summary": "Expand AIJob type system in frontend/src/types/aiJob.ts to include all Generation AI operations: voice.clone (payload: {audioUrl, voiceName}), music.generate (payload: {prompt, duration, mood}), broll.generate (payload: {description, duration}), logo.generate (payload: {brandName, style, colors}), sticker.generate (payload: {prompt, style}), character.generate (payload: {description, consistency: boolean})",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-75",
+      "summary": "Expand AIJob type system to include Editing AI operations: highlight.detect (payload: {videoUrl, criteria: string[]}), timeline.suggest (payload: {videoUrl, suggestType: 'cuts'|'effects'|'zooms'}), motion.autoKeyframe (payload: {clipId, property: string}), motion.autoEasing (payload: {clipId}), camera.shake (payload: {clipId, intensity}), parallax.create (payload: {clipId, depth})",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-76",
+      "summary": "Expand AIJob type system to include Enhancement AI operations: hdr.enhance (payload: {mediaUrl}), skin.correct (payload: {videoUrl}), flicker.remove (payload: {videoUrl}), face.restore (payload: {mediaUrl}), video.restore (payload: {videoUrl, type: 'old'|'damaged'})",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-77",
+      "summary": "Expand AIJob type system to include Creator AI operations: subtitle.animate (payload: {subtitleId, animation: string}), emoji.insert (payload: {subtitleId, keyword: string}), template.apply (payload: {templateId, projectId}), brand.apply (payload: {brandKitId, projectId}), object.track (payload: {videoUrl, objectType: string}), face.track (payload: {videoUrl}), effect.glow (payload: {clipId, color, intensity}), effect.blur (payload: {clipId, radius}), greenscreen.remove (payload: {videoUrl})",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-78",
+      "summary": "Expand AIJob type system to include Assistant AI command operations: command.cinematic (payload: {clipId}), command.fixColorAudio (payload: {videoUrl}), command.viralReel (payload: {videoUrl}), help.stepByStep (payload: {task: string}), help.explain (payload: {concept: string})",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-79",
+      "summary": "Expand AIJob type system to include Growth AI operations: title.generate (payload: {videoDescription, platform: string}), hook.generate (payload: {videoDescription}), caption.generate (payload: {videoDescription, tone: string}), hashtag.generate (payload: {videoDescription, platform: string}), virality.predict (payload: {videoUrl}), postTime.suggest (payload: {platform: string, audience: string}), abTest.create (payload: {variations: string[]})",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-80",
+      "summary": "Expand AIJob type system to include Experimental AI operations: actor.replace (payload: {videoUrl, targetFaceUrl}), avatar.create (payload: {script, avatarStyle}), eyeContact.correct (payload: {videoUrl}), gesture.add (payload: {videoUrl, gestureType: string}), script.toVideo (payload: {script, style}), camera.frame (payload: {videoUrl, framingType: string}), text.toShortVideo (payload: {prompt, duration})",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-81",
+      "summary": "Create VoiceClone page component in frontend/src/pages/ai/VoiceClone.tsx with audio upload zone, voice sample recording interface, voice name input, preview player showing cloned voice samples, clone button submitting voice.clone job, and results display with download/use-in-project buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-82",
+      "summary": "Create MusicGenerator page component in frontend/src/pages/ai/MusicGenerator.tsx with prompt textarea describing desired music, duration slider (10-180 seconds), mood selector (Energetic, Calm, Epic, Upbeat, Sad, Dramatic), genre dropdown, BPM range selector, generate button submitting music.generate job, and results display with audio player, download, and add-to-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-83",
+      "summary": "Create BRollGenerator page component in frontend/src/pages/ai/BRollGenerator.tsx with description textarea for desired B-roll footage, duration input, style selector (Cinematic, Documentary, Corporate, Nature, Urban), resolution selector, generate button submitting broll.generate job, and results display with video preview, download, and add-to-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-84",
+      "summary": "Create LogoGenerator page component in frontend/src/pages/ai/LogoGenerator.tsx with brand name input, style selector (Modern, Vintage, Minimalist, Abstract, Geometric), color palette selector with multi-color picker, icon preferences dropdown, generate button submitting logo.generate job, and results display grid showing multiple logo variations with download and use-in-project buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-85",
+      "summary": "Create StickerGenerator page component in frontend/src/pages/ai/StickerGenerator.tsx with prompt textarea, style selector (Cartoon, Realistic, Emoji, Doodle, 3D), size selector, background options (Transparent, White, Custom), generate button submitting sticker.generate job, and results display grid showing generated stickers with download and add-to-assets buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-86",
+      "summary": "Create CharacterGenerator page component in frontend/src/pages/ai/CharacterGenerator.tsx with description textarea for character details, consistency toggle for multi-pose generation, pose selector (Standing, Action, Profile, Multiple), style dropdown (Realistic, Anime, Cartoon, Fantasy), generate button submitting character.generate job, and results display with character preview, consistency checker, download, and add-to-assets buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-87",
+      "summary": "Create HighlightDetector page component in frontend/src/pages/ai/HighlightDetector.tsx with video upload zone, criteria selection checkboxes (Loudness peaks, Motion intensity, Face detection, Emotional moments, Action sequences), threshold sliders for each criteria, detect button submitting highlight.detect job, and results display showing detected highlights on timeline with timestamps, confidence scores, and add-to-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-88",
+      "summary": "Create TimelineIntelligence page component in frontend/src/pages/ai/TimelineIntelligence.tsx with project selector dropdown, suggestion type buttons (Suggest Cuts, Suggest Effects, Suggest Zooms), context information display showing current timeline state, analyze button submitting timeline.suggest job, and results display showing AI suggestions with visual previews, confidence scores, apply button for each suggestion, and apply-all button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-89",
+      "summary": "Create MotionAI page component in frontend/src/pages/ai/MotionAI.tsx with clip selector from current project, motion type selector (Auto Keyframes, Auto Easing, Camera Shake, Parallax Effect), property selector for auto keyframes (Position, Scale, Rotation, Opacity), intensity sliders, preview toggle, apply button submitting appropriate motion job (motion.autoKeyframe, motion.autoEasing, camera.shake, parallax.create), and results display with before/after comparison and undo option",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-90",
+      "summary": "Create HDREnhance page component in frontend/src/pages/ai/HDREnhance.tsx with media upload zone, HDR intensity slider, tone mapping options (Natural, Dramatic, Balanced), highlight protection toggle, shadow recovery slider, enhance button submitting hdr.enhance job, and results display with before/after HDR comparison slider, histogram display, download, and replace-in-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-91",
+      "summary": "Create SkinCorrection page component in frontend/src/pages/ai/SkinCorrection.tsx with video upload zone, skin tone adjustment sliders (Brightness, Warmth, Smoothness), blemish removal toggle, under-eye correction toggle, preview window with real-time adjustments, correct button submitting skin.correct job, and results display with before/after comparison, download, and replace-in-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-92",
+      "summary": "Create FlickerRemoval page component in frontend/src/pages/ai/FlickerRemoval.tsx with video upload zone, flicker detection preview showing problematic frames, intensity slider for correction strength, temporal smoothing toggle, remove button submitting flicker.remove job, and results display with before/after comparison showing eliminated flicker, download, and replace-in-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-93",
+      "summary": "Create FaceRestoration page component in frontend/src/pages/ai/FaceRestoration.tsx with media upload zone accepting photos and videos, face enhancement options (Detail Enhancement, Feature Sharpening, Age Reversal), reference photo upload for style matching, restore button submitting face.restore job, and results display with before/after face comparison at high zoom levels, quality metrics, download, and replace-in-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-94",
+      "summary": "Create VideoRestoration page component in frontend/src/pages/ai/VideoRestoration.tsx with video upload zone, restoration type selector (Old Film, Damaged Footage, Low Quality), damage assessment preview, restoration options (Scratch Removal, Color Restoration, Stabilization, Noise Reduction), restore button submitting video.restore job, and results display with before/after comparison showing restored quality, download, and replace-in-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-95",
+      "summary": "Create SubtitleAnimator page component in frontend/src/pages/ai/SubtitleAnimator.tsx with subtitle track selector from current project, animation preset selector (Fade In, Slide Up, Bounce, Typewriter, Word Pop, Wave), timing control sliders (Duration, Delay), custom animation builder with keyframe controls, preview player showing animated subtitles, apply button submitting subtitle.animate job, and results display with timeline integration",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-96",
+      "summary": "Create EmojiInserter page component in frontend/src/pages/ai/EmojiInserter.tsx with subtitle track selector, keyword detector showing detected words, emoji suggestion engine displaying relevant emojis for each keyword, emoji style selector (Native, Animated, 3D), position options (Before Word, After Word, Above Word), insert button submitting emoji.insert job, and results display with subtitle preview showing inserted emojis",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-97",
+      "summary": "Create TemplateApplicator page component in frontend/src/pages/ai/TemplateApplicator.tsx with template browser showing categories (Intro, Outro, Transition, Lower Third, Call-to-Action), template preview cards with animated thumbnails, template details panel showing layers and timing, project compatibility checker, apply button submitting template.apply job, and results display showing template integrated into timeline with customization options",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-98",
+      "summary": "Create BrandKitApplicator page component in frontend/src/pages/ai/BrandKitApplicator.tsx with brand kit manager showing saved kits, brand kit creator with logo upload, color palette selector, font selector, style preset options, project selector, apply button submitting brand.apply job, and results display showing brand elements applied across all project clips with consistency report",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-99",
+      "summary": "Create ObjectTracker page component in frontend/src/pages/ai/ObjectTracker.tsx with video upload zone, object type selector (Person, Face, Car, Animal, Custom), manual object selection tool with bounding box drawing, tracking options (Smooth, Precise, Fast), track button submitting object.track job, and results display showing tracked object path on timeline with keyframe visualization, attach element options, and export tracking data button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-100",
+      "summary": "Create EffectStudio page component in frontend/src/pages/ai/EffectStudio.tsx with clip selector, effect type tabs (Glow, Blur, More), glow effect panel with color picker, intensity slider, spread control, blur effect panel with radius slider, type selector (Gaussian, Motion, Radial), preview window with real-time effect rendering, apply button submitting effect.glow or effect.blur job, and results display with layer integration",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-101",
+      "summary": "Create GreenScreenRemover page component in frontend/src/pages/ai/GreenScreenRemover.tsx with video upload zone (no green screen required), subject detection preview with edge refinement tools, background replacement options (Transparent, Solid Color, Image, Video), edge feathering controls, spill suppression slider, remove button submitting greenscreen.remove job, and results display with before/after comparison, background preview, and timeline integration",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-102",
+      "summary": "Update AIAssistant component in frontend/src/components/AIAssistant.tsx to add command interface panel with quick command buttons ('Make this cinematic', 'Fix color and audio', 'Turn into viral reel', 'Optimize for YouTube', 'Add motion'), command input field with autocomplete suggestions, command history display, and command execution submitting appropriate command jobs (command.cinematic, command.fixColorAudio, command.viralReel) with automatic timeline integration",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-103",
+      "summary": "Create HelpWizard page component in frontend/src/pages/ai/HelpWizard.tsx with task selector dropdown (Add Subtitles, Apply Effects, Export Video, Animate Clips, Color Grade), step-by-step guide display with visual instructions and screenshots, interactive tutorial mode with highlighted UI elements, help button submitting help.stepByStep job, and concept explainer panel submitting help.explain job for technical terms",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-104",
+      "summary": "Create TitleGenerator page component in frontend/src/pages/ai/TitleGenerator.tsx with video description textarea, platform selector (YouTube, TikTok, Instagram, Twitter), tone selector (Clickbait, Professional, Casual, Educational), keyword input for SEO, generate button submitting title.generate job, and results display showing 10 title variations with engagement score predictions, copy buttons, and A/B test option",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-105",
+      "summary": "Create HookGenerator page component in frontend/src/pages/ai/HookGenerator.tsx with video description textarea, target audience input, hook style selector (Question, Statement, Teaser, Shock Value), generate button submitting hook.generate job, and results display showing 10 hook variations with attention-grab scores, script preview, and use-in-video button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-106",
+      "summary": "Create CaptionGenerator page component in frontend/src/pages/ai/CaptionGenerator.tsx with video description textarea, platform selector (Instagram, Facebook, LinkedIn, Twitter), tone selector (Professional, Casual, Funny, Inspirational, Sales), emoji toggle, hashtag count slider, generate button submitting caption.generate job, and results display showing 5 caption variations with engagement predictions, character counts, copy buttons, and post scheduling option",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-107",
+      "summary": "Create HashtagGenerator page component in frontend/src/pages/ai/HashtagGenerator.tsx with video description textarea, platform selector (Instagram, TikTok, Twitter, LinkedIn), hashtag count slider (5-30), competition level selector (Low, Medium, High), generate button submitting hashtag.generate job, and results display showing categorized hashtags (Trending, Niche, Evergreen) with reach estimates, popularity scores, copy buttons, and mix-strategy recommendations",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-108",
+      "summary": "Create ViralityPredictor page component in frontend/src/pages/ai/ViralityPredictor.tsx with video upload zone, analysis criteria checkboxes (Hook Quality, Retention Rate, Scroll-Stop Score, Engagement Potential, Trend Alignment), analyze button submitting virality.predict job, and results display showing overall virality score (0-100), detailed breakdown with charts (Hook Strength 0-10, Expected Retention %, Scroll-Stop Probability), improvement suggestions with specific recommendations, and compare-to-viral-videos feature",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-109",
+      "summary": "Create PostTimeOptimizer page component in frontend/src/pages/ai/PostTimeOptimizer.tsx with platform selector (YouTube, Instagram, TikTok, Twitter, Facebook), audience location multi-select, content type selector (Education, Entertainment, News, Tutorial), suggest button submitting postTime.suggest job, and results display showing recommended posting times with time zones, expected engagement rates, best days of week heatmap, and schedule-post integration",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-110",
+      "summary": "Create ABTestManager page component in frontend/src/pages/ai/ABTestManager.tsx with test type selector (Title, Thumbnail, Caption, Hook), variation input fields (A vs B vs C), test duration selector, success metric selector (CTR, Engagement, Views), create button submitting abTest.create job, and results display showing test performance comparison with statistical significance, winner declaration, confidence levels, and apply-winner button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-111",
+      "summary": "Create ActorReplacer page component in frontend/src/pages/ai/ActorReplacer.tsx with video upload zone, target face upload zone, face matching preview with alignment tools, expression preservation toggle, lighting adjustment options, replace button submitting actor.replace job, and results display with before/after face comparison, quality metrics (Realism Score, Expression Match), download, and replace-in-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-112",
+      "summary": "Create AIAvatar page component in frontend/src/pages/ai/AIAvatar.tsx with script textarea, avatar style selector with visual previews (Professional, Casual, Animated, Cartoon), voice selector with audio samples, language dropdown, background options (Studio, Custom, Green Screen), generate button submitting avatar.create job, and results display with avatar video preview, edit script option, regenerate with changes, download, and add-to-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-113",
+      "summary": "Create EyeContactCorrector page component in frontend/src/pages/ai/EyeContactCorrector.tsx with video upload zone, eye tracking preview showing gaze direction heatmap, correction strength slider, natural blink preservation toggle, target gaze point selector (Camera, Person, Object), correct button submitting eyeContact.correct job, and results display with before/after eye gaze comparison, engagement improvement estimate, download, and replace-in-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-114",
+      "summary": "Create GestureAdder page component in frontend/src/pages/ai/GestureAdder.tsx with video upload zone, gesture type selector (Point, Wave, Thumbs Up, Clap, Custom), gesture timing input with timeline scrubber, hand model selector (Realistic, Cartoon, Abstract), gesture intensity slider, add button submitting gesture.add job, and results display with gesture preview overlay, timing adjustments, download, and replace-in-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-115",
+      "summary": "Create ScriptToVideo page component in frontend/src/pages/ai/ScriptToVideo.tsx with script textarea with rich text editor, style selector (Documentary, Tutorial, Vlog, Promo, News), visual style selector (Cinematic, Minimalist, Colorful, Dark), voice-over toggle with voice selector, music toggle with mood selector, generate button submitting script.toVideo job, and results display with full video preview, scene breakdown with timestamps, edit scenes option, download, and add-to-project buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-116",
+      "summary": "Create CameraFramer page component in frontend/src/pages/ai/CameraFramer.tsx with video upload zone, framing type selector (Rule of Thirds, Center, Close-up, Wide, Dynamic), subject tracking toggle, safe area display toggle, reframe button submitting camera.frame job, and results display with before/after framing comparison, composition analysis, crop area visualization, download, and replace-in-timeline buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-117",
+      "summary": "Create TextToShortVideo page component in frontend/src/pages/ai/TextToShortVideo.tsx with prompt textarea describing full short video concept, duration selector (15s, 30s, 60s), platform preset selector (TikTok, Instagram Reel, YouTube Short), style selector (Trendy, Professional, Fun, Dramatic), generate button submitting text.toShortVideo job, and results display with full short video preview, scene breakdown, edit option, download, and publish-to-platform integration",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-118",
+      "summary": "Update backend/src/main.mo AIJobManager actor to implement AI caching system with stable variable cacheStore: HashMap<Text, CachedResult> storing job results by hash of input parameters, cache invalidation logic after 24 hours, and getCached query method that checks cache before processing new jobs",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-119",
+      "summary": "Update backend/src/main.mo AIJobManager actor to implement smart job scheduling system with priority queue using stable variable jobQueue: PriorityQueue<AIJob>, priority calculation based on job type (interactive > batch), user tier (premium > free), and estimated processing time, and schedule() method that optimally orders jobs",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-120",
+      "summary": "Update backend/src/main.mo AIJobManager actor to implement device-aware quality optimization with stable variable deviceProfiles: HashMap<Text, DeviceProfile> storing device capabilities, quality preset selector (Low, Medium, High, Auto) in job submission, and getOptimalQuality() method that selects appropriate resolution/bitrate based on device profile",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-121",
+      "summary": "Update backend/src/main.mo AIJobManager actor to implement lag prediction & avoidance system with stable variable performanceMetrics: [ProcessingMetric] tracking historical processing times, predictLagRisk() method analyzing current queue load and device capabilities, and preventiveFallback() method automatically switching to lower quality modes when lag is predicted",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-122",
+      "summary": "Update backend/src/main.mo AIJobManager actor to implement auto fallback modes with stable variable fallbackConfig: FallbackConfig, detectFailure() method monitoring job execution, fallback strategies (Retry with lower quality, Switch to alternative AI provider, Use cached similar result, Abort and notify user), and activateFallback() method executing appropriate strategy",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-123",
+      "summary": "Update aiService.ts in frontend/src/services/aiService.ts to add integration points for Generation AI providers: voiceCloneIntegration with ElevenLabs API configuration, musicGenerateIntegration with Soundraw/AIVA API, brollGenerateIntegration with Runway/Pika API, logoGenerateIntegration with LogoAI API, stickerGenerateIntegration with DALL-E API, characterGenerateIntegration with Midjourney API consistency mode",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-124",
+      "summary": "Update aiService.ts to add integration points for Editing AI providers: highlightDetectIntegration with custom ML model, timelineSuggestIntegration with GPT-4 Vision API, motionAIIntegration with Runway Motion API, and mock implementations returning structured placeholder data for all Editing AI operations",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-125",
+      "summary": "Update aiService.ts to add integration points for Enhancement AI providers: hdrEnhanceIntegration with custom shader pipeline, skinCorrectIntegration with FaceApp API, flickerRemoveIntegration with Topaz Video AI, faceRestoreIntegration with CodeFormer API, videoRestoreIntegration with Topaz Video AI, and mock implementations for all Enhancement AI operations",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-126",
+      "summary": "Update aiService.ts to add integration points for Creator AI providers: subtitleAnimateIntegration with After Effects API, emojiInsertIntegration with GPT-4 NLP, templateApplyIntegration with custom template engine, brandApplyIntegration with brand kit manager, objectTrackIntegration with OpenCV.js, faceTrackIntegration with MediaPipe, effectsIntegration with custom WebGL shaders, greenscreenRemoveIntegration with SegmentAnything API, and mock implementations for all Creator AI operations",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-127",
+      "summary": "Update aiService.ts to add integration points for Growth AI providers: titleGenerateIntegration with GPT-4 API fine-tuned on viral titles, hookGenerateIntegration with Claude API, captionGenerateIntegration with GPT-3.5 Turbo, hashtagGenerateIntegration with custom hashtag database, viralityPredictIntegration with custom ML model, postTimeSuggestIntegration with analytics API, abTestIntegration with experimentation platform, and mock implementations for all Growth AI operations",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-128",
+      "summary": "Update aiService.ts to add integration points for Experimental AI providers: actorReplaceIntegration with DeepFaceLab API, avatarCreateIntegration with Synthesia API, eyeContactCorrectIntegration with custom CV model, gestureAddIntegration with Runway API, scriptToVideoIntegration with Pictory API, cameraFrameIntegration with GPT-4 Vision, textToShortVideoIntegration with full pipeline orchestrator, and mock implementations for all Experimental AI operations",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-129",
+      "summary": "Add routes in Router.tsx for all Generation AI pages: /ai/voice-clone (VoiceClone), /ai/music-gen (MusicGenerator), /ai/broll-gen (BRollGenerator), /ai/logo-gen (LogoGenerator), /ai/sticker-gen (StickerGenerator), /ai/character-gen (CharacterGenerator), all wrapped with PageTransition",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-130",
+      "summary": "Add routes in Router.tsx for all Editing AI pages: /ai/highlight-detect (HighlightDetector), /ai/timeline-ai (TimelineIntelligence), /ai/motion-ai (MotionAI), all wrapped with PageTransition",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-131",
+      "summary": "Add routes in Router.tsx for all Enhancement AI pages: /ai/hdr-enhance (HDREnhance), /ai/skin-correct (SkinCorrection), /ai/flicker-remove (FlickerRemoval), /ai/face-restore (FaceRestoration), /ai/video-restore (VideoRestoration), all wrapped with PageTransition",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-132",
+      "summary": "Add routes in Router.tsx for all Creator AI pages: /ai/subtitle-animate (SubtitleAnimator), /ai/emoji-insert (EmojiInserter), /ai/template-apply (TemplateApplicator), /ai/brand-kit (BrandKitApplicator), /ai/object-track (ObjectTracker), /ai/effect-studio (EffectStudio), /ai/greenscreen-remove (GreenScreenRemover), all wrapped with PageTransition",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-133",
+      "summary": "Add routes in Router.tsx for all Growth AI pages: /ai/title-gen (TitleGenerator), /ai/hook-gen (HookGenerator), /ai/caption-gen (CaptionGenerator), /ai/hashtag-gen (HashtagGenerator), /ai/virality-predict (ViralityPredictor), /ai/post-time (PostTimeOptimizer), /ai/ab-test (ABTestManager), all wrapped with PageTransition",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-134",
+      "summary": "Add routes in Router.tsx for all Experimental AI pages: /ai/actor-replace (ActorReplacer), /ai/avatar-create (AIAvatar), /ai/eye-contact (EyeContactCorrector), /ai/gesture-add (GestureAdder), /ai/script-to-video (ScriptToVideo), /ai/camera-frame (CameraFramer), /ai/text-to-short (TextToShortVideo), /ai/help-wizard (HelpWizard), all wrapped with PageTransition",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-135",
+      "summary": "Update Home page in frontend/src/pages/Home.tsx to expand AI Tools section with complete navigation grid showing all AI categories: Generation AI (6 tools), Editing AI (3 tools), Enhancement AI (5 tools), Creator AI (7 tools), Assistant AI (2 tools), Growth AI (7 tools), Experimental AI (7 tools), each with glassmorphism card, icon, name, description, and route navigation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-136",
+      "summary": "Update homeSections.ts data file in frontend/src/data/homeSections.ts to include all 37 new AI tool routes organized by category (Generation AI, Editing AI, Enhancement AI, Creator AI, Assistant AI, Growth AI, Experimental AI) with proper names and descriptions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-137",
+      "summary": "Create AIToolCard component in frontend/src/components/AIToolCard.tsx with glassmorphism styling, category badge display, tool icon with animated gradient background, tool name and description, hover effect with scale and glow animation, click navigation to tool page, and category-specific color coding",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-138",
+      "summary": "Update AIJobStatus component in frontend/src/components/AIJobStatus.tsx to support all new job types with category-specific icons, color-coded progress bars by AI category, detailed status messages for each operation type, and category filtering dropdown",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-139",
+      "summary": "Create AIToolsGrid component in frontend/src/components/AIToolsGrid.tsx that organizes all AI tools by category with collapsible category sections, category headers with tool counts, responsive grid layout (grid-cols-4 desktop, grid-cols-2 mobile), search/filter functionality, and category-based color theming",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-140",
+      "summary": "Update useAIJob hook in frontend/src/hooks/useAIJob.ts to handle all new job types with type-specific result processing, category-aware automatic integration (Generation→Assets, Editing→Timeline, Enhancement→Replace, Creator→Layers, Growth→Export), and category-specific success notifications",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-141",
+      "summary": "Create AIServiceConfig component in frontend/src/components/AIServiceConfig.tsx for configuring AI service providers with provider selection dropdowns for each AI category (Replicate, HuggingFace, OpenAI, ElevenLabs, Runway, Custom), API key management, provider status indicators, and test connection functionality",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-142",
+      "summary": "Create VoiceClone page component in frontend/src/pages/ai/VoiceClone.tsx with glassmorphism panel, audio upload zone with drag-and-drop support, voice sample recording interface with microphone access, voice name input field, preview player showing cloned voice samples, clone button that submits voice.clone job with payload {audioUrl: string, voiceName: string}, and results display with download button and use-in-project button",
+      "reqIds": [
+        "REQ-98"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-143",
+      "summary": "Create MusicGenerator page component in frontend/src/pages/ai/MusicGenerator.tsx with glassmorphism panel, prompt textarea with placeholder 'Describe the music you want to create...', duration slider (10-180 seconds) with real-time value display, mood selector buttons (Energetic, Calm, Epic, Upbeat, Sad, Dramatic), genre dropdown, BPM range selector with dual slider, generate button that submits music.generate job with payload {prompt: string, duration: number, mood: string}, and results display with audio player, waveform visualization, download button, and add-to-timeline button",
+      "reqIds": [
+        "REQ-99"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-144",
+      "summary": "Create BRollGenerator page component in frontend/src/pages/ai/BRollGenerator.tsx with glassmorphism panel, description textarea with placeholder 'Describe the B-roll footage you need...', duration input (5-60 seconds), style selector with visual previews (Cinematic, Documentary, Corporate, Nature, Urban), resolution selector (1080p, 4K), generate button that submits broll.generate job with payload {description: string, duration: number}, and results display with video preview player, download button, and add-to-timeline button",
+      "reqIds": [
+        "REQ-100"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-145",
+      "summary": "Create LogoGenerator page component in frontend/src/pages/ai/LogoGenerator.tsx with glassmorphism panel, brand name input field, style selector with visual previews (Modern, Vintage, Minimalist, Abstract, Geometric), color palette selector with multi-color picker supporting up to 3 colors, icon preferences dropdown, generate button that submits logo.generate job with payload {brandName: string, style: string, colors: string[]}, and results display grid showing 4-6 logo variations with download buttons and use-in-project buttons",
+      "reqIds": [
+        "REQ-101"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-146",
+      "summary": "Create StickerGenerator page component in frontend/src/pages/ai/StickerGenerator.tsx with glassmorphism panel, prompt textarea with placeholder 'Describe the sticker you want...', style selector (Cartoon, Realistic, Emoji, Doodle, 3D), size selector (128x128, 256x256, 512x512), background options (Transparent, White, Custom Color), generate button that submits sticker.generate job with payload {prompt: string, style: string}, and results display grid showing generated stickers with download buttons and add-to-assets buttons",
+      "reqIds": [
+        "REQ-102"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-147",
+      "summary": "Create CharacterGenerator page component in frontend/src/pages/ai/CharacterGenerator.tsx with glassmorphism panel, description textarea with placeholder 'Describe the character in detail...', consistency toggle switch with label 'Generate consistent character across multiple poses', pose selector (Standing, Action, Profile, Multiple Poses), style dropdown (Realistic, Anime, Cartoon, Fantasy, Pixel Art), generate button that submits character.generate job with payload {description: string, consistency: boolean}, and results display with character preview, consistency checker showing pose variations, download button, and add-to-assets button",
+      "reqIds": [
+        "REQ-103"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-148",
+      "summary": "Create HighlightDetector page component in frontend/src/pages/ai/HighlightDetector.tsx with glassmorphism panel, video upload zone with drag-and-drop support, criteria selection checkboxes (Loudness peaks, Motion intensity, Face detection, Emotional moments, Action sequences), threshold sliders (0-100) for each criteria, detect button that submits highlight.detect job with payload {videoUrl: string, criteria: string[]}, and results display showing detected highlights on interactive timeline with timestamps, confidence scores (0-100), thumbnail previews, and add-to-timeline buttons for each highlight",
+      "reqIds": [
+        "REQ-104"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-149",
+      "summary": "Create TimelineIntelligence page component in frontend/src/pages/ai/TimelineIntelligence.tsx with glassmorphism panel, project selector dropdown showing current editor projects, suggestion type buttons (Suggest Cuts, Suggest Effects, Suggest Zooms), context information display showing current timeline state and clip count, analyze button that submits timeline.suggest job with payload {videoUrl: string, suggestType: 'cuts'|'effects'|'zooms'}, and results display showing AI suggestions with visual previews, confidence scores, reasoning explanations, individual apply buttons, and apply-all button",
+      "reqIds": [
+        "REQ-105"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-150",
+      "summary": "Create MotionAI page component in frontend/src/pages/ai/MotionAI.tsx with glassmorphism panel, clip selector dropdown from current project clips, motion type selector (Auto Keyframes, Auto Easing, Camera Shake, Parallax Effect), property selector for auto keyframes (Position, Scale, Rotation, Opacity), intensity sliders (0-100) for camera shake and parallax, preview toggle for real-time preview, apply button that submits appropriate motion job (motion.autoKeyframe, motion.autoEasing, camera.shake, parallax.create) with payload {clipId: string, property?: string, intensity?: number}, and results display with before/after comparison video player and undo option",
+      "reqIds": [
+        "REQ-106"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-151",
+      "summary": "Create HDREnhance page component in frontend/src/pages/ai/HDREnhance.tsx with glassmorphism panel, media upload zone accepting images and videos, HDR intensity slider (0-100) with real-time preview, tone mapping options radio buttons (Natural, Dramatic, Balanced), highlight protection toggle switch, shadow recovery slider (0-100), enhance button that submits hdr.enhance job with payload {mediaUrl: string}, and results display with before/after HDR comparison slider, histogram display showing tonal distribution, download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-107"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-152",
+      "summary": "Create SkinCorrection page component in frontend/src/pages/ai/SkinCorrection.tsx with glassmorphism panel, video upload zone, skin tone adjustment sliders (Brightness 0-100, Warmth 0-100, Smoothness 0-100), blemish removal toggle switch, under-eye correction toggle switch, preview window with real-time adjustments and face detection visualization, correct button that submits skin.correct job with payload {videoUrl: string}, and results display with before/after face comparison with zoom controls, download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-108"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-153",
+      "summary": "Create FlickerRemoval page component in frontend/src/pages/ai/FlickerRemoval.tsx with glassmorphism panel, video upload zone, flicker detection preview showing problematic frames with red highlights, intensity slider (0-100) for correction strength, temporal smoothing toggle switch, remove button that submits flicker.remove job with payload {videoUrl: string}, and results display with before/after comparison video players showing eliminated flicker, frame analysis chart, download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-109"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-154",
+      "summary": "Create FaceRestoration page component in frontend/src/pages/ai/FaceRestoration.tsx with glassmorphism panel, media upload zone accepting photos and videos, face enhancement options checkboxes (Detail Enhancement, Feature Sharpening, Age Reversal), reference photo upload zone for style matching, restore button that submits face.restore job with payload {mediaUrl: string}, and results display with before/after face comparison at 200% zoom level, quality metrics (Detail Score, Clarity Score), download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-110"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-155",
+      "summary": "Create VideoRestoration page component in frontend/src/pages/ai/VideoRestoration.tsx with glassmorphism panel, video upload zone, restoration type selector radio buttons (Old Film, Damaged Footage, Low Quality), damage assessment preview showing detected issues, restoration options checkboxes (Scratch Removal, Color Restoration, Stabilization, Noise Reduction), restore button that submits video.restore job with payload {videoUrl: string, type: 'old'|'damaged'}, and results display with before/after comparison video players showing restored quality, restoration report, download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-111"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-156",
+      "summary": "Create SubtitleAnimator page component in frontend/src/pages/ai/SubtitleAnimator.tsx with glassmorphism panel, subtitle track selector dropdown from current project subtitles, animation preset selector with visual previews (Fade In, Slide Up, Bounce, Typewriter, Word Pop, Wave), timing control sliders (Duration 0.1-2s, Delay 0-1s), custom animation builder with keyframe controls for position/scale/rotation/opacity, preview player showing animated subtitles, apply button that submits subtitle.animate job with payload {subtitleId: string, animation: string}, and results display with timeline integration showing animated subtitle track",
+      "reqIds": [
+        "REQ-112"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-157",
+      "summary": "Create EmojiInserter page component in frontend/src/pages/ai/EmojiInserter.tsx with glassmorphism panel, subtitle track selector dropdown, keyword detector display showing detected words in grid with highlight, emoji suggestion engine displaying 3-5 relevant emojis for each keyword with confidence scores, emoji style selector (Native, Animated, 3D), position options radio buttons (Before Word, After Word, Above Word), insert button that submits emoji.insert job with payload {subtitleId: string, keyword: string}, and results display with subtitle preview showing inserted emojis and edit options",
+      "reqIds": [
+        "REQ-113"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-158",
+      "summary": "Create TemplateApplicator page component in frontend/src/pages/ai/TemplateApplicator.tsx with glassmorphism panel, template browser with category tabs (Intro, Outro, Transition, Lower Third, Call-to-Action), template preview cards with animated thumbnails and hover preview, template details panel showing layers and timing information, project compatibility checker displaying compatibility status, apply button that submits template.apply job with payload {templateId: string, projectId: string}, and results display showing template integrated into timeline with customization options (colors, text, duration)",
+      "reqIds": [
+        "REQ-114"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-159",
+      "summary": "Create BrandKitApplicator page component in frontend/src/pages/ai/BrandKitApplicator.tsx with glassmorphism panel, brand kit manager displaying saved kits in grid, brand kit creator with logo upload zone, color palette selector (3-5 colors), font selector with preview, style preset options (Modern, Classic, Bold, Playful), project selector dropdown, apply button that submits brand.apply job with payload {brandKitId: string, projectId: string}, and results display showing brand elements applied across all project clips with consistency report (logo placement, color usage, font consistency)",
+      "reqIds": [
+        "REQ-115"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-160",
+      "summary": "Create ObjectTracker page component in frontend/src/pages/ai/ObjectTracker.tsx with glassmorphism panel, video upload zone, object type selector dropdown (Person, Face, Car, Animal, Custom), manual object selection tool with canvas bounding box drawing, tracking options radio buttons (Smooth, Precise, Fast), track button that submits object.track job with payload {videoUrl: string, objectType: string}, and results display showing tracked object path on timeline with keyframe visualization, attach element options (text, image, effect), and export tracking data button (JSON format)",
+      "reqIds": [
+        "REQ-116"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-161",
+      "summary": "Create EffectStudio page component in frontend/src/pages/ai/EffectStudio.tsx with glassmorphism panel, clip selector dropdown from current project, effect type tabs (Glow, Blur, More), glow effect panel with color picker, intensity slider (0-100), spread control slider (0-50), blur effect panel with radius slider (0-100), type selector (Gaussian, Motion, Radial), preview window with real-time effect rendering using WebGL, apply button that submits effect.glow or effect.blur job with payload {clipId: string, color?: string, intensity: number}, and results display with layer integration showing effect applied to clip",
+      "reqIds": [
+        "REQ-117"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-162",
+      "summary": "Create GreenScreenRemover page component in frontend/src/pages/ai/GreenScreenRemover.tsx with glassmorphism panel, video upload zone (no green screen required), subject detection preview with automatic edge detection visualization, edge refinement tools (brush/eraser) with size slider, background replacement options tabs (Transparent, Solid Color, Image, Video) with upload zones, edge feathering controls slider (0-20), spill suppression slider (0-100), remove button that submits greenscreen.remove job with payload {videoUrl: string}, and results display with before/after comparison, background preview, download button, and timeline integration button",
+      "reqIds": [
+        "REQ-118"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-163",
+      "summary": "Create TitleGenerator page component in frontend/src/pages/ai/TitleGenerator.tsx with glassmorphism panel, video description textarea with character counter, platform selector buttons with icons (YouTube, TikTok, Instagram, Twitter), tone selector radio buttons (Clickbait, Professional, Casual, Educational), keyword input field for SEO with tag display, generate button that submits title.generate job with payload {videoDescription: string, platform: string}, and results display showing 10 title variations with engagement score predictions (0-100), character count for each platform, copy buttons, and A/B test option",
+      "reqIds": [
+        "REQ-119"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-164",
+      "summary": "Create HookGenerator page component in frontend/src/pages/ai/HookGenerator.tsx with glassmorphism panel, video description textarea, target audience input field with demographics suggestions, hook style selector buttons (Question, Statement, Teaser, Shock Value), generate button that submits hook.generate job with payload {videoDescription: string}, and results display showing 10 hook variations with attention-grab scores (0-100), hook type badges, script preview showing first 5 seconds, and use-in-video button that adds hook to video start",
+      "reqIds": [
+        "REQ-120"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-165",
+      "summary": "Create CaptionGenerator page component in frontend/src/pages/ai/CaptionGenerator.tsx with glassmorphism panel, video description textarea, platform selector buttons (Instagram, Facebook, LinkedIn, Twitter), tone selector radio buttons (Professional, Casual, Funny, Inspirational, Sales), emoji toggle switch, hashtag count slider (5-30) with value display, generate button that submits caption.generate job with payload {videoDescription: string, tone: string}, and results display showing 5 caption variations with engagement predictions (0-100), character counts with platform limits highlighted, copy buttons, and post scheduling option",
+      "reqIds": [
+        "REQ-121"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-166",
+      "summary": "Create HashtagGenerator page component in frontend/src/pages/ai/HashtagGenerator.tsx with glassmorphism panel, video description textarea, platform selector buttons (Instagram, TikTok, Twitter, LinkedIn), hashtag count slider (5-30) with value display, competition level selector radio buttons (Low, Medium, High), generate button that submits hashtag.generate job with payload {videoDescription: string, platform: string}, and results display showing categorized hashtags (Trending, Niche, Evergreen) with color-coded badges, reach estimates (10K-1M+), popularity scores (0-100), copy-all button, copy-by-category buttons, and mix-strategy recommendations",
+      "reqIds": [
+        "REQ-122"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-167",
+      "summary": "Create ViralityPredictor page component in frontend/src/pages/ai/ViralityPredictor.tsx with glassmorphism panel, video upload zone, analysis criteria checkboxes (Hook Quality, Retention Rate, Scroll-Stop Score, Engagement Potential, Trend Alignment), analyze button that submits virality.predict job with payload {videoUrl: string}, and results display showing overall virality score (0-100) with circular progress indicator, detailed breakdown with charts (Hook Strength 0-10, Expected Retention %, Scroll-Stop Probability 0-100), improvement suggestions list with specific actionable recommendations, and compare-to-viral-videos feature showing similar viral videos",
+      "reqIds": [
+        "REQ-123"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-168",
+      "summary": "Create PostTimeOptimizer page component in frontend/src/pages/ai/PostTimeOptimizer.tsx with glassmorphism panel, platform selector buttons (YouTube, Instagram, TikTok, Twitter, Facebook), audience location multi-select dropdown with timezone display, content type selector radio buttons (Education, Entertainment, News, Tutorial), suggest button that submits postTime.suggest job with payload {platform: string, audience: string}, and results display showing recommended posting times in 24-hour format with timezone, expected engagement rates (0-100%) with bar charts, best days of week heatmap with color intensity, and schedule-post integration button",
+      "reqIds": [
+        "REQ-124"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-169",
+      "summary": "Create ABTestManager page component in frontend/src/pages/ai/ABTestManager.tsx with glassmorphism panel, test type selector buttons (Title, Thumbnail, Caption, Hook), variation input fields (A vs B vs C) with add-variation button, test duration selector dropdown (1 day, 3 days, 7 days, 14 days), success metric selector radio buttons (CTR, Engagement, Views, Shares), create button that submits abTest.create job with payload {variations: string[]}, and results display showing test performance comparison table with statistical significance indicators, winner declaration badge, confidence levels (90%, 95%, 99%), performance charts, and apply-winner button",
+      "reqIds": [
+        "REQ-125"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-170",
+      "summary": "Create ActorReplacer page component in frontend/src/pages/ai/ActorReplacer.tsx with glassmorphism panel, video upload zone, target face upload zone with face detection preview, face matching preview with alignment visualization showing face landmarks, expression preservation toggle switch, lighting adjustment options sliders (Brightness, Contrast, Color Temperature), replace button that submits actor.replace job with payload {videoUrl: string, targetFaceUrl: string}, and results display with before/after face comparison with zoom slider, quality metrics (Realism Score 0-100, Expression Match 0-100), download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-126"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-171",
+      "summary": "Create AIAvatar page component in frontend/src/pages/ai/AIAvatar.tsx with glassmorphism panel, script textarea with rich text editor and word counter, avatar style selector with visual previews (Professional, Casual, Animated, Cartoon), voice selector dropdown with audio sample preview buttons, language dropdown (20+ languages), background options tabs (Studio, Custom Upload, Green Screen), generate button that submits avatar.create job with payload {script: string, avatarStyle: string}, and results display with avatar video preview player, edit script option, regenerate with changes button, download button, and add-to-timeline button",
+      "reqIds": [
+        "REQ-127"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-172",
+      "summary": "Create EyeContactCorrector page component in frontend/src/pages/ai/EyeContactCorrector.tsx with glassmorphism panel, video upload zone, eye tracking preview showing gaze direction heatmap with color intensity, correction strength slider (0-100) with subtle/natural/strong labels, natural blink preservation toggle switch, target gaze point selector with canvas click interface (Camera, Person, Object), correct button that submits eyeContact.correct job with payload {videoUrl: string}, and results display with before/after eye gaze comparison with split-screen player, engagement improvement estimate (0-100%), download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-128"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-173",
+      "summary": "Create GestureAdder page component in frontend/src/pages/ai/GestureAdder.tsx with glassmorphism panel, video upload zone, gesture type selector with visual icons (Point, Wave, Thumbs Up, Clap, Custom), gesture timing input with timeline scrubber showing video frames, hand model selector buttons (Realistic, Cartoon, Abstract), gesture intensity slider (0-100), add button that submits gesture.add job with payload {videoUrl: string, gestureType: string}, and results display with gesture preview overlay on video player, timing adjustment controls, download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-129"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-174",
+      "summary": "Create ScriptToVideo page component in frontend/src/pages/ai/ScriptToVideo.tsx with glassmorphism panel, script textarea with rich text editor and auto-save, style selector buttons (Documentary, Tutorial, Vlog, Promo, News), visual style selector with previews (Cinematic, Minimalist, Colorful, Dark), voice-over toggle with voice selector dropdown, music toggle with mood selector (Upbeat, Calm, Epic, None), generate button that submits script.toVideo job with payload {script: string, style: string}, and results display with full video preview player, scene breakdown list with timestamps and thumbnails, edit scenes option, download button, and add-to-project button",
+      "reqIds": [
+        "REQ-130"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-175",
+      "summary": "Create CameraFramer page component in frontend/src/pages/ai/CameraFramer.tsx with glassmorphism panel, video upload zone, framing type selector buttons with visual guides (Rule of Thirds, Center, Close-up, Wide, Dynamic), subject tracking toggle switch, safe area display toggle with grid overlay preview, reframe button that submits camera.frame job with payload {videoUrl: string, framingType: string}, and results display with before/after framing comparison using split-screen player, composition analysis overlay showing rule of thirds grid, crop area visualization, download button, and replace-in-timeline button",
+      "reqIds": [
+        "REQ-131"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-176",
+      "summary": "Create TextToShortVideo page component in frontend/src/pages/ai/TextToShortVideo.tsx with glassmorphism panel, prompt textarea with character counter and examples button, duration selector buttons (15s, 30s, 60s), platform preset selector with icons (TikTok, Instagram Reel, YouTube Short), style selector with animated previews (Trendy, Professional, Fun, Dramatic), generate button that submits text.toShortVideo job with payload {prompt: string, duration: number}, and results display with full short video preview player, scene breakdown grid with thumbnails, edit option for individual scenes, download button, and publish-to-platform integration button",
+      "reqIds": [
+        "REQ-132"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-177",
+      "summary": "Create HelpWizard page component in frontend/src/pages/ai/HelpWizard.tsx with glassmorphism panel, task selector dropdown with categories (Add Subtitles, Apply Effects, Export Video, Animate Clips, Color Grade, Use AI Tools), step-by-step guide display with numbered steps and visual instructions, interactive tutorial mode with highlighted UI elements overlay, help button that submits help.stepByStep job with payload {task: string}, concept explainer panel with search input and expandable sections, and explain button that submits help.explain job with payload {concept: string} for technical terms",
+      "reqIds": [
+        "REQ-133"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-185",
+      "summary": "Update backend/main.mo to implement AIJobManager actor with AI caching system using stable variable cacheStore stored as HashMap mapping job hash to cached result, cache invalidation logic that expires entries after 24 hours using timestamp comparison, getCached query method that checks cache before processing new jobs by computing hash of job type and payload, and cache hit/miss metrics tracking",
+      "reqIds": [
+        "REQ-141"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-186",
+      "summary": "Update backend/main.mo AIJobManager actor to implement smart job scheduling system with priority queue using stable variable jobQueue storing prioritized jobs, priority calculation algorithm based on job type (interactive jobs like enhance get higher priority than batch jobs like export), user tier (premium users get higher priority than free users), and estimated processing time (shorter jobs prioritized), and schedule() method that optimally orders jobs in queue",
+      "reqIds": [
+        "REQ-142"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-187",
+      "summary": "Update backend/main.mo AIJobManager actor to implement device-aware quality optimization with stable variable deviceProfiles storing device capabilities (CPU, GPU, RAM, connection speed), quality preset selector in job submission payload ('low'|'medium'|'high'|'auto'), getOptimalQuality() method that selects appropriate resolution and bitrate based on device profile, and automatic quality downgrade for low-end devices",
+      "reqIds": [
+        "REQ-143"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-188",
+      "summary": "Update backend/main.mo AIJobManager actor to implement lag prediction and avoidance system with stable variable performanceMetrics tracking historical processing times per job type, predictLagRisk() method analyzing current queue load and device capabilities to predict potential lag, and preventiveFallback() method that automatically switches to lower quality modes or alternative processing strategies when lag risk exceeds threshold",
+      "reqIds": [
+        "REQ-144"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-189",
+      "summary": "Update backend/main.mo AIJobManager actor to implement auto fallback modes with stable variable fallbackConfig storing fallback strategies, detectFailure() method monitoring job execution for failures (timeout, error, resource exhaustion), fallback strategies including retry with lower quality, switch to alternative AI provider, use cached similar result, and abort with user notification, and activateFallback() method executing appropriate strategy based on failure type",
+      "reqIds": [
+        "REQ-145"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-196",
+      "summary": "Add routes in Router.tsx for all Generation AI pages: /ai/voice-clone pointing to VoiceClone component, /ai/music-gen pointing to MusicGenerator component, /ai/broll-gen pointing to BRollGenerator component, /ai/logo-gen pointing to LogoGenerator component, /ai/sticker-gen pointing to StickerGenerator component, /ai/character-gen pointing to CharacterGenerator component, all wrapped with PageTransition component for consistent 3D navigation effects",
+      "reqIds": [
+        "REQ-152"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-197",
+      "summary": "Add routes in Router.tsx for all Editing AI pages: /ai/highlight-detect pointing to HighlightDetector component, /ai/timeline-ai pointing to TimelineIntelligence component, /ai/motion-ai pointing to MotionAI component, all wrapped with PageTransition component",
+      "reqIds": [
+        "REQ-153"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-198",
+      "summary": "Add routes in Router.tsx for all Enhancement AI pages: /ai/hdr-enhance pointing to HDREnhance component, /ai/skin-correct pointing to SkinCorrection component, /ai/flicker-remove pointing to FlickerRemoval component, /ai/face-restore pointing to FaceRestoration component, /ai/video-restore pointing to VideoRestoration component, all wrapped with PageTransition component",
+      "reqIds": [
+        "REQ-154"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-199",
+      "summary": "Add routes in Router.tsx for all Creator AI pages: /ai/subtitle-animate pointing to SubtitleAnimator component, /ai/emoji-insert pointing to EmojiInserter component, /ai/template-apply pointing to TemplateApplicator component, /ai/brand-kit pointing to BrandKitApplicator component, /ai/object-track pointing to ObjectTracker component, /ai/effect-studio pointing to EffectStudio component, /ai/greenscreen-remove pointing to GreenScreenRemover component, all wrapped with PageTransition component",
+      "reqIds": [
+        "REQ-155"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-200",
+      "summary": "Add routes in Router.tsx for all Growth AI pages: /ai/title-gen pointing to TitleGenerator component, /ai/hook-gen pointing to HookGenerator component, /ai/caption-gen pointing to CaptionGenerator component, /ai/hashtag-gen pointing to HashtagGenerator component, /ai/virality-predict pointing to ViralityPredictor component, /ai/post-time pointing to PostTimeOptimizer component, /ai/ab-test pointing to ABTestManager component, all wrapped with PageTransition component",
+      "reqIds": [
+        "REQ-156"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-201",
+      "summary": "Add routes in Router.tsx for all Experimental AI pages: /ai/actor-replace pointing to ActorReplacer component, /ai/avatar-create pointing to AIAvatar component, /ai/eye-contact pointing to EyeContactCorrector component, /ai/gesture-add pointing to GestureAdder component, /ai/script-to-video pointing to ScriptToVideo component, /ai/camera-frame pointing to CameraFramer component, /ai/text-to-short pointing to TextToShortVideo component, /ai/help-wizard pointing to HelpWizard component, all wrapped with PageTransition component",
+      "reqIds": [
+        "REQ-157"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-202",
+      "summary": "Update Home page component in frontend/src/pages/Home.tsx to expand AI Tools section with complete navigation grid organized by 8 AI categories: Generation AI (Image Generator, Video Generator, Voice Clone, Music Gen, B-Roll Gen, Logo Gen, Sticker Gen, Character Gen), Editing AI (Highlight Detect, Timeline AI, Motion AI), Enhancement AI (Auto Enhance, Auto Upscale, HDR Enhance, Skin Correct, Flicker Remove, Face Restore, Video Restore), Creator AI (Auto Subtitles, Subtitle Animate, Emoji Insert, Template Apply, Brand Kit, Object Track, Effect Studio, Green Screen Remove), Assistant AI (AI Assistant, Help Wizard), Growth AI (Title Gen, Hook Gen, Caption Gen, Hashtag Gen, Virality Predict, Post Time, A/B Test), Experimental AI (Actor Replace, Avatar Create, Eye Contact, Gesture Add, Script to Video, Camera Frame, Text to Short), each category with collapsible section header and grid of glassmorphism cards with category-specific color coding",
+      "reqIds": [
+        "REQ-158"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-203",
+      "summary": "Update homeSections.ts data file in frontend/src/data/homeSections.ts to include all 50+ AI tool routes organized by category structure: Generation AI section with 8 tools, Editing AI section with 3 tools, Enhancement AI section with 7 tools, Creator AI section with 8 tools, Assistant AI section with 2 tools, Growth AI section with 7 tools, Experimental AI section with 8 tools, each tool entry including name, description, route path, and category for proper organization",
+      "reqIds": [
+        "REQ-159"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-205",
+      "summary": "Update AIJobStatus component in frontend/src/components/AIJobStatus.tsx to support all 43 new job types with category-specific icons (Generation: sparkles, Editing: scissors, Enhancement: magic wand, Creator: palette, Assistant: message, Growth: trending up, Experimental: flask), color-coded progress bars matching category colors, detailed status messages for each operation type showing job-specific information, category filtering dropdown allowing users to filter jobs by AI category, and expanded job details showing job configuration and parameters",
+      "reqIds": [
+        "REQ-161"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-206",
+      "summary": "Update useAIJob hook in frontend/src/hooks/useAIJob.ts to handle all 43 new job types with type-specific result processing logic: Generation AI jobs automatically add results to asset library, Editing AI jobs automatically integrate suggestions into timeline, Enhancement AI jobs replace original clips with enhanced versions, Creator AI jobs create new layers or modify existing ones, Assistant AI jobs display help content in UI, Growth AI jobs show optimization results in modal, Experimental AI jobs show preview with apply option, and category-aware success notifications with action buttons (View in Assets, View on Timeline, View Results, Apply Changes)",
+      "reqIds": [
+        "REQ-162"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-207",
+      "summary": "Update AIAssistant component in frontend/src/components/AIAssistant.tsx to add command interface panel with quick command buttons displaying 10 common commands ('Make this cinematic', 'Fix color and audio', 'Turn into viral reel', 'Optimize for YouTube', 'Add motion blur', 'Balance exposure', 'Remove background noise', 'Add dynamic transitions', 'Enhance faces', 'Generate captions'), command input field with autocomplete showing matching commands as user types, command history display showing last 20 executed commands, and command execution submitting appropriate AI jobs (command.cinematic, command.fixColorAudio, command.viralReel) with automatic timeline integration of results",
+      "reqIds": [
+        "REQ-163"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-208",
+      "summary": "Update backend/main.mo to implement AIJobManager actor with complete job processing pipeline including submitJob method that accepts AIJob JSON payload, assigns unique job IDs using stable variable nextJobId, stores jobs in stable variable jobQueue using HashMap, returns job ID to caller, processNextJob method that dequeues highest priority job and updates status to 'processing', getJobStatus method that returns current status for given job ID, and getJobResults method that returns completed job results",
+      "reqIds": [
+        "REQ-164"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-209",
+      "summary": "Implement AI caching system in backend/main.mo with stable variable cacheStore as HashMap mapping job hash (computed from job type + payload) to CachedResult record containing result data and timestamp, cache hit logic that checks cacheStore before processing new jobs, cache invalidation that automatically expires entries older than 24 hours on query, and getCachedResult query method that returns cached data if available",
+      "reqIds": [
+        "REQ-165"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-210",
+      "summary": "Implement smart job scheduling in backend/main.mo with priority calculation function that assigns higher priority to interactive jobs (enhance, upscale) over batch jobs (export), premium users over free users, and shorter estimated processing time over longer, priority queue implementation using sorted array in stable variable with insertWithPriority method, and schedule method that reorders queue based on priority scores",
+      "reqIds": [
+        "REQ-166"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-211",
+      "summary": "Implement device-aware quality optimization in backend/main.mo with stable variable deviceProfiles storing device capabilities (deviceId, cpu, gpu, ram, connectionSpeed), registerDevice method that saves device profile, getOptimalQuality method that selects quality preset (low/medium/high) based on device capabilities comparing against threshold values, and automatic quality downgrade logic for low-end devices (cpu < 4 cores or ram < 4GB defaults to low quality)",
+      "reqIds": [
+        "REQ-167"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-212",
+      "summary": "Implement lag prediction and avoidance system in backend/main.mo with stable variable performanceMetrics as array of ProcessingMetric records tracking job type, processing time, device ID, and timestamp, predictLagRisk method that analyzes current queue load (length), recent processing times, and device capabilities to return risk score (0-100), and preventiveFallback method that automatically triggers quality downgrade when risk score exceeds 70",
+      "reqIds": [
+        "REQ-168"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-213",
+      "summary": "Implement auto fallback system in backend/main.mo with stable variable fallbackConfig storing fallback strategies for each job type, detectFailure method that monitors job execution for timeout (> 5 minutes), errors, or resource exhaustion, fallback strategy execution including retry with lower quality (attempt 1), switch to alternative processing (attempt 2), use cached similar result (attempt 3), and abort with notification (attempt 4), and activateFallback method that executes appropriate strategy based on failure type and attempt count",
+      "reqIds": [
+        "REQ-169"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-214",
+      "summary": "Create migration.mo file in backend directory with proper state migration logic that preserves existing AIJobManager data structures including jobQueue, cacheStore, deviceProfiles, performanceMetrics, and fallbackConfig using stable variable migration pattern with OldActor type containing previous state shape and NewActor type with expanded state including all AI system features",
+      "reqIds": [
+        "REQ-170"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-215",
+      "summary": "Update aiService.ts in frontend/src/services/aiService.ts to implement all 50+ mock AI functions with realistic placeholder data: mockVoiceClone returning audio URL with voice metadata, mockMusicGenerate returning audio URL with BPM and duration, mockBRollGenerate returning video URL with scene timestamps, mockLogoGenerate returning array of 4-6 logo image URLs, mockStickerGenerate returning PNG with transparent background, mockCharacterGenerate returning array of 3-5 character poses, and similar implementations for all 43 remaining job types returning appropriate structured data",
+      "reqIds": [
+        "REQ-171"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-216",
+      "summary": "Add API integration points to aiService.ts for all external AI providers with configuration objects: ElevenLabs for voice cloning (apiKey, voiceId), Replicate for image/video generation (apiKey, modelId), Runway for motion AI (apiKey, projectId), Hugging Face for NLP tasks (apiKey, modelName), OpenAI for GPT tasks (apiKey, model), and provider-specific request/response handlers with error handling and retry logic for each integration",
+      "reqIds": [
+        "REQ-172"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-223",
+      "summary": "Update AIAssistant component in frontend/src/components/AIAssistant.tsx to add command interface with quick command buttons section displaying 10 common commands as glassmorphism buttons ('Make this cinematic', 'Fix color and audio', 'Turn into viral reel', 'Optimize for YouTube', 'Add motion blur', 'Balance exposure', 'Remove background noise', 'Add dynamic transitions', 'Enhance faces', 'Generate captions'), command input field with autocomplete dropdown showing matching commands from knowledge base, command history panel showing last 20 executed commands with timestamps and results, and command execution handler that maps commands to appropriate AI job submissions with automatic parameter inference from editor context",
+      "reqIds": [
+        "REQ-179"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-224",
+      "summary": "Expand AIJob type system in frontend/src/types/aiJob.ts to include complete type definitions for all 50+ AI operations with discriminated union type AIJob covering all job types, typed payload interfaces for each operation (VoiceClonePayload, MusicGeneratePayload, etc.), AIJobResult generic type with type-specific result data, and helper type guards (isGenerationJob, isEditingJob, etc.) for type narrowing in components",
+      "reqIds": [
+        "REQ-180"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-225",
+      "summary": "Update backend/main.mo AIJobManager actor to implement complete job processing pipeline with submitJob method accepting AIJob JSON payload and assigning unique job IDs using stable variable nextJobId, storing jobs in stable variable jobQueue as HashMap<Text, AIJob>, returning job ID to caller, processNextJob method dequeuing highest priority job and updating status to 'processing', getJobStatus query returning current status for given job ID, and getJobResults query returning completed job results with proper error handling",
+      "reqIds": [
+        "REQ-181"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-226",
+      "summary": "Implement AI caching system in backend/main.mo with stable variable cacheStore as HashMap<Text, CachedResult> mapping job hash (computed from job type + payload using SHA256 or Text.hash) to CachedResult record containing result data and timestamp, cache hit logic checking cacheStore before processing new jobs, cache invalidation automatically expiring entries older than 24 hours on query, and getCachedResult query method returning cached data if available",
+      "reqIds": [
+        "REQ-182"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-227",
+      "summary": "Implement smart job scheduling in backend/main.mo with priority calculation function assigning higher priority to interactive jobs (enhance, upscale, highlight.detect) over batch jobs (export, video.generate), premium users over free users (using mock tier system), and shorter estimated processing time over longer, priority queue implementation using sorted array in stable variable with insertWithPriority method, and schedule method reordering queue based on priority scores",
+      "reqIds": [
+        "REQ-183"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-228",
+      "summary": "Implement device-aware quality optimization in backend/main.mo with stable variable deviceProfiles storing device capabilities (deviceId, cpu cores count, gpu tier, ram GB, connectionSpeed Mbps), registerDevice method saving device profile, getOptimalQuality method selecting quality preset ('low'|'medium'|'high') based on device capabilities comparing against thresholds (low: <4 cores or <4GB RAM, medium: 4-8 cores and 4-8GB RAM, high: >8 cores and >8GB RAM), and automatic quality downgrade logic for low-end devices",
+      "reqIds": [
+        "REQ-184"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-229",
+      "summary": "Implement lag prediction and avoidance system in backend/main.mo with stable variable performanceMetrics as array of ProcessingMetric records tracking jobType, processingTimeMs, deviceId, and timestamp, predictLagRisk method analyzing current queue load (length), recent processing times (last 10 jobs), and device capabilities to return risk score (0-100), and preventiveFallback method automatically triggering quality downgrade when risk score exceeds 70",
+      "reqIds": [
+        "REQ-185"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-230",
+      "summary": "Implement auto fallback system in backend/main.mo with stable variable fallbackConfig storing fallback strategies for each job type, detectFailure method monitoring job execution for timeout (>5 minutes), errors, or resource exhaustion, fallback strategy execution including retry with lower quality (attempt 1), switch to alternative processing (attempt 2), use cached similar result (attempt 3), and abort with notification (attempt 4), and activateFallback method executing appropriate strategy based on failure type and attempt count",
+      "reqIds": [
+        "REQ-186"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-237",
+      "summary": "Create migration.mo file in backend directory with proper state migration logic preserving existing AIJobManager data structures including jobQueue, cacheStore, deviceProfiles, performanceMetrics, and fallbackConfig using stable variable migration pattern with preupgrade and postupgrade system functions, OldState type containing previous state shape with basic job queue, and NewState type with expanded state including all AI system features (caching, scheduling, device profiles, metrics, fallback), and migration function transferring data from old to new format with proper type conversions",
+      "reqIds": [
+        "REQ-193"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "EditorApp",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

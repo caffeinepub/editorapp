@@ -1,0 +1,290 @@
+{
+  "kind": "build_request",
+  "title": "Complete AI Tool Implementation with Full Mock Data and Backend Integration",
+  "projectName": "Caffeine Video Editor",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-181",
+      "text": "Update backend/main.mo AIJobManager actor to implement complete job processing pipeline with submitJob method accepting AIJob JSON payload and assigning unique job IDs using stable variable nextJobId, storing jobs in stable variable jobQueue as HashMap<Text, AIJob>, returning job ID to caller, processNextJob method dequeuing highest priority job and updating status to 'processing', getJobStatus query returning current status for given job ID, and getJobResults query returning completed job results with proper error handling",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "complete all the AI tool implementations with full mock data and API integration points"
+        ]
+      },
+      "acceptanceCriteria": [
+        "submitJob method accepts JSON payload and returns unique job ID",
+        "Jobs stored in stable HashMap with job ID as key",
+        "processNextJob dequeues and updates status correctly",
+        "getJobStatus returns current status for any job ID",
+        "getJobResults returns completed results or error message"
+      ]
+    },
+    {
+      "id": "REQ-182",
+      "text": "Implement AI caching system in backend/main.mo with stable variable cacheStore as HashMap<Text, CachedResult> mapping job hash (computed from job type + payload using SHA256 or Text.hash) to CachedResult record containing result data and timestamp, cache hit logic checking cacheStore before processing new jobs, cache invalidation automatically expiring entries older than 24 hours on query, and getCachedResult query method returning cached data if available",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "Complete Backend (Motoko): AI caching system with 24-hour expiration"
+        ]
+      },
+      "acceptanceCriteria": [
+        "CachedResult type includes result data and timestamp",
+        "Job hash computed consistently from type and payload",
+        "Cache checked before processing new jobs",
+        "Entries older than 24 hours automatically invalidated",
+        "getCachedResult query returns cached data when available"
+      ]
+    },
+    {
+      "id": "REQ-183",
+      "text": "Implement smart job scheduling in backend/main.mo with priority calculation function assigning higher priority to interactive jobs (enhance, upscale, highlight.detect) over batch jobs (export, video.generate), premium users over free users (using mock tier system), and shorter estimated processing time over longer, priority queue implementation using sorted array in stable variable with insertWithPriority method, and schedule method reordering queue based on priority scores",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "Smart job scheduling with priority queue"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Priority calculation considers job type, user tier, and processing time",
+        "Interactive jobs prioritized over batch jobs",
+        "Priority queue maintains sorted order",
+        "insertWithPriority correctly positions jobs in queue",
+        "schedule method reorders queue dynamically"
+      ]
+    },
+    {
+      "id": "REQ-184",
+      "text": "Implement device-aware quality optimization in backend/main.mo with stable variable deviceProfiles storing device capabilities (deviceId, cpu cores count, gpu tier, ram GB, connectionSpeed Mbps), registerDevice method saving device profile, getOptimalQuality method selecting quality preset ('low'|'medium'|'high') based on device capabilities comparing against thresholds (low: <4 cores or <4GB RAM, medium: 4-8 cores and 4-8GB RAM, high: >8 cores and >8GB RAM), and automatic quality downgrade logic for low-end devices",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "Device-aware quality optimization"
+        ]
+      },
+      "acceptanceCriteria": [
+        "DeviceProfile type includes cpu, gpu, ram, connectionSpeed",
+        "registerDevice stores device capabilities",
+        "getOptimalQuality returns appropriate quality preset",
+        "Quality thresholds correctly categorize devices",
+        "Automatic downgrade applies to low-end devices"
+      ]
+    },
+    {
+      "id": "REQ-185",
+      "text": "Implement lag prediction and avoidance system in backend/main.mo with stable variable performanceMetrics as array of ProcessingMetric records tracking jobType, processingTimeMs, deviceId, and timestamp, predictLagRisk method analyzing current queue load (length), recent processing times (last 10 jobs), and device capabilities to return risk score (0-100), and preventiveFallback method automatically triggering quality downgrade when risk score exceeds 70",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "Lag prediction & avoidance"
+        ]
+      },
+      "acceptanceCriteria": [
+        "ProcessingMetric type tracks job processing data",
+        "performanceMetrics stores historical data",
+        "predictLagRisk calculates risk score based on queue and metrics",
+        "Risk score ranges from 0-100",
+        "preventiveFallback triggers at risk > 70"
+      ]
+    },
+    {
+      "id": "REQ-186",
+      "text": "Implement auto fallback system in backend/main.mo with stable variable fallbackConfig storing fallback strategies for each job type, detectFailure method monitoring job execution for timeout (>5 minutes), errors, or resource exhaustion, fallback strategy execution including retry with lower quality (attempt 1), switch to alternative processing (attempt 2), use cached similar result (attempt 3), and abort with notification (attempt 4), and activateFallback method executing appropriate strategy based on failure type and attempt count",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "Auto fallback modes with retry strategies"
+        ]
+      },
+      "acceptanceCriteria": [
+        "FallbackConfig defines strategies for each job type",
+        "detectFailure identifies timeout, errors, and resource issues",
+        "Four-stage fallback strategy implemented",
+        "activateFallback selects strategy based on failure and attempts",
+        "Fallback logs and notifies user appropriately"
+      ]
+    },
+    {
+      "id": "REQ-187",
+      "text": "Update aiService.ts in frontend/src/services/aiService.ts to implement complete mock AI functions for all 50+ job types with realistic placeholder data: mockVoiceClone returning {audioUrl: string, voiceId: string, sampleRate: number}, mockMusicGenerate returning {audioUrl: string, duration: number, bpm: number, waveform: number[]}, mockBRollGenerate returning {videoUrl: string, scenes: Array<{start: number, end: number, description: string}>}, mockLogoGenerate returning {logos: Array<{url: string, variant: string}>}, mockStickerGenerate returning {imageUrl: string, transparent: boolean}, mockCharacterGenerate returning {images: Array<{url: string, pose: string}>, consistency: number}, and similar structured responses for all remaining 43+ job types",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "All mock AI functions returning realistic placeholder data"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Mock functions for all 50+ job types implemented",
+        "Each mock returns structured data matching expected format",
+        "Data includes realistic values (URLs, scores, timestamps)",
+        "Mock responses simulate processing delay (500-2000ms)",
+        "All mocks return consistent data shapes"
+      ]
+    },
+    {
+      "id": "REQ-188",
+      "text": "Add API integration points to aiService.ts for all external AI providers with configuration objects: elevenlabsConfig for voice cloning {apiKey: string, voiceId: string, stability: number, similarity: number}, replicateConfig for image/video generation {apiKey: string, models: {image: string, video: string}}, runwayConfig for motion AI {apiKey: string, projectId: string}, huggingfaceConfig for NLP tasks {apiKey: string, models: Record<string, string>}, openaiConfig for GPT tasks {apiKey: string, model: string, temperature: number}, and provider-specific request handlers with error handling, retry logic (3 attempts with exponential backoff), and timeout handling (30s timeout)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "API integration points for Replicate, Hugging Face, and custom endpoints"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Configuration objects for all 6+ AI providers",
+        "Request handlers for each provider implemented",
+        "Error handling with descriptive messages",
+        "Retry logic with exponential backoff (3 attempts)",
+        "30-second timeout for all API calls"
+      ]
+    },
+    {
+      "id": "REQ-189",
+      "text": "Update useAIJob hook in frontend/src/hooks/useAIJob.ts to implement comprehensive job lifecycle management for all 50+ job types with submitAIJob function using React Query mutation calling backend submitJob, status polling using React Query with configurable 2-second interval checking job status until 'completed' or 'failed', result retrieval calling backend getJobResults when status is 'completed', automatic asset integration for Generation AI jobs (image.generate, video.generate, voice.clone, music.generate, broll.generate, logo.generate, sticker.generate, character.generate) adding results to asset library with metadata, automatic timeline integration for Editing/Creator AI jobs creating new clips/layers with proper timing and transforms, and category-specific success notifications with action buttons (View in Assets, View on Timeline, Apply Changes, Download)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "Full job lifecycle management in useAIJob hook"
+        ]
+      },
+      "acceptanceCriteria": [
+        "submitAIJob handles all 50+ job types",
+        "Status polling checks every 2 seconds until completion",
+        "Results retrieved automatically on completion",
+        "Generation AI results added to asset library",
+        "Editing/Creator AI results integrated into timeline",
+        "Category-specific notifications with appropriate actions"
+      ]
+    },
+    {
+      "id": "REQ-190",
+      "text": "Update AIAssistant component in frontend/src/components/AIAssistant.tsx to add command interface panel with quick command buttons section displaying 10 glassmorphism buttons ('Make this cinematic', 'Fix color and audio', 'Turn into viral reel', 'Optimize for YouTube', 'Add motion blur', 'Balance exposure', 'Remove background noise', 'Add dynamic transitions', 'Enhance faces', 'Generate captions'), command input field with autocomplete dropdown showing matching commands from aiKnowledgeBase as user types, command history panel showing last 20 executed commands with timestamps and result summaries, and command execution handler mapping commands to appropriate AI job submissions (command.cinematic, command.fixColorAudio, command.viralReel) with automatic parameter inference from editor context (selected clips, project settings)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "Command interface in AIAssistant with 10 quick commands"
+        ]
+      },
+      "acceptanceCriteria": [
+        "10 quick command buttons with glassmorphism styling",
+        "Autocomplete shows matching commands as user types",
+        "Command history displays last 20 commands",
+        "Commands map to appropriate AI jobs",
+        "Context automatically inferred from editor state"
+      ]
+    },
+    {
+      "id": "REQ-191",
+      "text": "Update AIJobStatus component in frontend/src/components/AIJobStatus.tsx to support all 50+ job types with jobTypeMapping object defining icon, label, and category for each job type, category filter dropdown allowing users to filter by AI category (All, Generation, Editing, Enhancement, Creator, Assistant, Growth, Experimental), color-coded progress bars using category-specific colors (Generation: purple, Editing: blue, Enhancement: green, Creator: orange, Assistant: cyan, Growth: pink, Experimental: red), expanded job details panel showing job configuration parameters and payload data in formatted JSON, and real-time status updates using React Query with 2-second refresh interval",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "Enhanced AIJobStatus with filtering and real-time updates"
+        ]
+      },
+      "acceptanceCriteria": [
+        "jobTypeMapping covers all 50+ job types",
+        "Category filter dropdown functional",
+        "Progress bars color-coded by category",
+        "Expanded details show formatted job configuration",
+        "Status updates refresh every 2 seconds"
+      ]
+    },
+    {
+      "id": "REQ-192",
+      "text": "Update Home page component in frontend/src/pages/Home.tsx to display all 50+ AI tools organized by 8 categories (Generation AI with 8 tools, Editing AI with 3 tools, Enhancement AI with 7 tools, Creator AI with 8 tools, Assistant AI with 2 tools, Growth AI with 7 tools, Experimental AI with 8 tools, System AI with backend features) as expandable/collapsible category sections with category headers showing category icon, name, tool count badge, and expand/collapse chevron icon, category content as responsive grid (grid-cols-4 gap-6 on desktop, grid-cols-2 gap-4 on mobile) of AIToolCard components, category-specific color themes matching established palette, expand/collapse state managed with React useState, and smooth height transitions using CSS transitions",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "Category-organized Home page with all 50+ tools"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All 8 AI categories displayed with tools",
+        "Category headers show icon, name, and count",
+        "Expand/collapse functionality works smoothly",
+        "Responsive grid adapts to screen size",
+        "Category colors match established theme"
+      ]
+    },
+    {
+      "id": "REQ-193",
+      "text": "Create migration.mo file in backend directory with proper state migration logic preserving existing AIJobManager data structures including jobQueue, cacheStore, deviceProfiles, performanceMetrics, and fallbackConfig using stable variable migration pattern with preupgrade and postupgrade system functions, OldState type containing previous state shape with basic job queue, and NewState type with expanded state including all AI system features (caching, scheduling, device profiles, metrics, fallback), and migration function transferring data from old to new format with proper type conversions",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-final"
+        ],
+        "quotes": [
+          "proper state migration logic"
+        ]
+      },
+      "acceptanceCriteria": [
+        "preupgrade saves current state before upgrade",
+        "postupgrade restores state after upgrade",
+        "OldState and NewState types defined",
+        "Migration function transfers all data",
+        "Type conversions handle format changes"
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must use single-actor architecture with all logic in main.mo",
+    "Migration.mo only required when upgrading existing state",
+    "Frontend immutable paths (useInternetIdentity, useActor, main.tsx, components/ui) must not be edited",
+    "All AI integrations must include both mock implementations and API integration points",
+    "Mock data must be realistic and match expected API response formats",
+    "All job types must use the expanded AIJob discriminated union type system"
+  ],
+  "nonGoals": [
+    "Implementing actual external AI API calls (only integration points and mocks)",
+    "Real-time WebSocket connections for job updates",
+    "User authentication beyond existing Internet Identity",
+    "Payment processing for premium tiers",
+    "Database migration tools or CLI utilities",
+    "Mobile native app versions",
+    "Server-side rendering or SSR optimization"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
